@@ -8,15 +8,15 @@ function addNote(event) {
         copy: document.getElementById('body-copy').value
     }
     notes.push(note);
-    console.log(notes);
 
     document.querySelector('form').reset();
 
     if (note['title'].length !== 0) {
 
+
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('id', 'user-note-pad')
-
+        newNotePad.setAttribute('data-index', notes.length - 1);
 
         let newDiv = document.createElement('div');
         newDiv.setAttribute('id', 'underline');
@@ -28,6 +28,12 @@ function addNote(event) {
         newH2.value = note['title'];
         newDiv.appendChild(newH2);
 
+
+        newH2.addEventListener('input', function (e) {
+            let newIndex = e.target.parentElement.parentElement.dataset.index;
+            notes[newIndex].title = e.target.value;
+        });
+
         let newP = document.createElement('textarea')
         newP.setAttribute('id', 'noteP')
         newP.value = note['copy'];
@@ -38,18 +44,27 @@ function addNote(event) {
         close.innerHTML = `<i class="fas fa-times-circle">`;
         newNotePad.appendChild(close);
 
-        container.appendChild(newNotePad);
+        let theFirstChild = container.firstChild;
+        container.insertBefore(newNotePad, theFirstChild);
 
-        close.addEventListener("click", function (event) {
-            document.getElementById("close-this")
-            this.parentElement.remove();
-
-
+        close.addEventListener("click", function (e) {
+            let noteIndex = e.target.parentElement.parentElement.dataset.index;
+            notes[noteIndex].deleted = true; // tell the array it's deleted
+            e.target.parentElement.parentElement.remove();
+            // if(notes[noteIndex].deleted = !true){
+            // make a button to save 
+            // }
         });
 
+
+
         document.getElementById('title').focus();
+
+
     }
+
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     container = document.querySelector('.wrapper');
