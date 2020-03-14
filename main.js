@@ -1,5 +1,6 @@
 let notes = [];
 let saveArray = [];
+let getSaveArray= [];
 let container;
 let deleted = false;
 
@@ -34,12 +35,19 @@ function addNote(event) {
         newH2.addEventListener('input', function (e) {
             let newIndex = e.target.parentElement.parentElement.dataset.index;
             notes[newIndex].title = e.target.value;
+            notes[newIndex].copy = e.target.value;
         });
 
         let newP = document.createElement('textarea')
         newP.setAttribute('id', 'noteP')
         newP.value = note['copy'];
         newNotePad.appendChild(newP);
+
+        // newP.addEventListener('input', function (e) {
+        //     let newCopy = e.target.parentElement.parentElement.dataset.index;
+        //     notes[newCopy].copy = e.target.value;
+        // });
+
 
         let close = document.createElement('span')
         close.setAttribute('id', 'close-this')
@@ -69,6 +77,14 @@ document.addEventListener('DOMContentLoaded', () => {
     container = document.querySelector('.wrapper');
     document.getElementById('btn').addEventListener('click', addNote);
     document.getElementById('title').focus();
+
+    
+    let getSaveArray = JSON.parse(localStorage.getItem('saveArray'));
+    for (let i = 0; i < getSaveArray.length; i++) {
+            notes.push(getSaveArray[i]);
+        }
+        // return getSaveArray;
+//    console.log(getSaveArray);
 });
 
 
@@ -82,8 +98,6 @@ saveBtn.addEventListener('click', () => {
 
     for (let i = 0; i < notes.length; i++) {
         if (notes[i]['deleted'] !== true) {
-            
-           
             saveArray.push(notes[i]);
             console.log(saveArray);
         }
