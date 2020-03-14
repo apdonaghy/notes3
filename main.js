@@ -1,6 +1,5 @@
 let notes = [];
 let saveArray = [];
-let getSaveArray= [];
 let container;
 let deleted = false;
 
@@ -10,12 +9,12 @@ function addNote(event) {
         title: document.getElementById('title').value,
         copy: document.getElementById('body-copy').value
     }
+    note.saved = false;
     notes.push(note);
-
+  
     document.querySelector('form').reset();
 
     if (note['title'].length !== 0) {
-
 
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('id', 'user-note-pad')
@@ -35,7 +34,6 @@ function addNote(event) {
         newH2.addEventListener('input', function (e) {
             let newIndex = e.target.parentElement.parentElement.dataset.index;
             notes[newIndex].title = e.target.value;
-            notes[newIndex].copy = e.target.value;
         });
 
         let newP = document.createElement('textarea')
@@ -63,8 +61,6 @@ function addNote(event) {
             e.target.parentElement.parentElement.remove();
         });
 
-
-
         document.getElementById('title').focus();
 
 
@@ -78,13 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn').addEventListener('click', addNote);
     document.getElementById('title').focus();
 
-    
     let getSaveArray = JSON.parse(localStorage.getItem('saveArray'));
+
     for (let i = 0; i < getSaveArray.length; i++) {
-            notes.push(getSaveArray[i]);
-        }
-        // return getSaveArray;
-//    console.log(getSaveArray);
+        notes.push(getSaveArray[i]);
+        saveArray[i].saved = true;
+    }
+
 });
 
 
@@ -97,12 +93,9 @@ saveContainer.appendChild(saveBtn);
 saveBtn.addEventListener('click', () => {
 
     for (let i = 0; i < notes.length; i++) {
-        if (notes[i]['deleted'] !== true) {
+        if (notes[i]['deleted'] !== true && notes[i]['saved'] == false) {
             saveArray.push(notes[i]);
-            console.log(saveArray);
         }
         localStorage.setItem('saveArray', JSON.stringify(saveArray));
-
     }
 })
-
