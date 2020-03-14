@@ -1,5 +1,7 @@
 let notes = [];
+let saveArray = [];
 let container;
+let deleted = false;
 
 function addNote(event) {
     event.preventDefault();
@@ -51,9 +53,6 @@ function addNote(event) {
             let noteIndex = e.target.parentElement.parentElement.dataset.index;
             notes[noteIndex].deleted = true; // tell the array it's deleted
             e.target.parentElement.parentElement.remove();
-            // if(notes[noteIndex].deleted = !true){
-            // make a button to save 
-            // }
         });
 
 
@@ -71,3 +70,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn').addEventListener('click', addNote);
     document.getElementById('title').focus();
 });
+
+
+let saveBtn = document.createElement('button');
+saveBtn.setAttribute('type', 'button');
+saveBtn.innerHTML = "save";
+let saveContainer = document.querySelector('#save')
+saveContainer.appendChild(saveBtn);
+
+saveBtn.addEventListener('click', () => {
+
+    for (let i = 0; i < notes.length; i++) {
+        if (notes[i]['deleted'] !== true) {
+            
+           
+            saveArray.push(notes[i]);
+            console.log(saveArray);
+        }
+        localStorage.setItem('saveArray', JSON.stringify(saveArray));
+
+    }
+})
+
