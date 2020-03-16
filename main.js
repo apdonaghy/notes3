@@ -1,5 +1,6 @@
 let notes = [];
-let saveArray = [];
+// let saveArray = [];
+// let getSaveArray = [];
 let container;
 let deleted = false;
 
@@ -9,12 +10,12 @@ function addNote(event) {
         title: document.getElementById('title').value,
         copy: document.getElementById('body-copy').value
     }
-    note.saved = false;
     notes.push(note);
-  
+
     document.querySelector('form').reset();
 
     if (note['title'].length !== 0) {
+
 
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('id', 'user-note-pad')
@@ -34,17 +35,13 @@ function addNote(event) {
         newH2.addEventListener('input', function (e) {
             let newIndex = e.target.parentElement.parentElement.dataset.index;
             notes[newIndex].title = e.target.value;
+            notes[newIndex].copy = e.target.value;
         });
 
         let newP = document.createElement('textarea')
         newP.setAttribute('id', 'noteP')
         newP.value = note['copy'];
         newNotePad.appendChild(newP);
-
-        // newP.addEventListener('input', function (e) {
-        //     let newCopy = e.target.parentElement.parentElement.dataset.index;
-        //     notes[newCopy].copy = e.target.value;
-        // });
 
 
         let close = document.createElement('span')
@@ -60,10 +57,7 @@ function addNote(event) {
             notes[noteIndex].deleted = true; // tell the array it's deleted
             e.target.parentElement.parentElement.remove();
         });
-
         document.getElementById('title').focus();
-
-
     }
 
 }
@@ -74,16 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn').addEventListener('click', addNote);
     document.getElementById('title').focus();
 
+    /* 
     let getSaveArray = JSON.parse(localStorage.getItem('saveArray'));
-
-    for (let i = 0; i < getSaveArray.length; i++) {
-        notes.push(getSaveArray[i]);
-        saveArray[i].saved = true;
-    }
-
+    
+   for (let i = 0; i < getSaveArray.length; i++) {
+            notes.push(getSaveArray[i]);
+        }
+        */
 });
 
 
+/*
 let saveBtn = document.createElement('button');
 saveBtn.setAttribute('type', 'button');
 saveBtn.innerHTML = "save";
@@ -93,9 +88,12 @@ saveContainer.appendChild(saveBtn);
 saveBtn.addEventListener('click', () => {
 
     for (let i = 0; i < notes.length; i++) {
-        if (notes[i]['deleted'] !== true && notes[i]['saved'] == false) {
+        if (notes[i]['deleted'] !== true) {
             saveArray.push(notes[i]);
+            console.log(saveArray);
         }
         localStorage.setItem('saveArray', JSON.stringify(saveArray));
+
     }
 })
+*/
