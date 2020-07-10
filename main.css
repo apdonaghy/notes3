@@ -17,16 +17,16 @@ body {
 }
 
 h1 {
-    color: #FFCC00;
+    color: #cdff50;
     font-size: 6em;
-    border-bottom: 1px solid #FFCC00;
+    border-bottom: 1px solid #cdff50;
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 4%;
 }
 
 #user-note-pad {
-    border: 1px solid #FFCC00;
+    border: 1px solid #cdff50;
     border-radius: 7px;
     width: 31.25%;
     /* height:10em; */
@@ -59,7 +59,7 @@ textarea {
 }
 
 #noteH2{
-    color: #FFCC00;
+    color: #cdff50;
     font-weight: 400;
     font-size: 1.35em;
     padding: 10px 20px 10px 20px;
@@ -76,7 +76,7 @@ i {
 
 #noteP {
     font-size: 1em;
-    color: #FFCC00;
+    color: #cdff50;
     font-weight: 200;
     padding: 20px;
     background-color:#27282c;
@@ -86,11 +86,11 @@ i {
 
 input,
 textarea {
-    caret-color: #FFCC00;
+    caret-color: #cdff50;
 }
 
 button {
-    background-color: #FFCC00;
+    background-color: #cdff50;
     color:#1e1f23;
     border: none;
     padding: 0px 15px 0px 15px;
@@ -124,17 +124,17 @@ input:focus {
 }
 
 i{
-    color:#FFCC00;
+    color:#cdff50;
     font-size:2em;
     float:right;
     margin:10px;
 }
 
 i:hover{
-    color:#EEB400;
+    color:#cdff50;
 }
 
 
 #underline{
-    border-bottom: 1px solid #FFCC00;   
+    border-bottom: 1px solid #cdff50;   
 }

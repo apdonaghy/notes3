@@ -35,14 +35,17 @@ function addNote(event) {
         newH2.addEventListener('input', function (e) {
             let newIndex = e.target.parentElement.parentElement.dataset.index;
             notes[newIndex].title = e.target.value;
-            notes[newIndex].copy = e.target.value;
         });
 
-        let newP = document.createElement('textarea')
-        newP.setAttribute('id', 'noteP')
+        let newP = document.createElement('textarea');
+        newP.setAttribute('id', 'noteP');
         newP.value = note['copy'];
         newNotePad.appendChild(newP);
 
+        newP.addEventListener('input', function (event) {
+            let newIndex = event.target.parentElement.parentElement.dataset.index;
+            notes[newIndex].copy = event.target.value;
+        });
 
         let close = document.createElement('span')
         close.setAttribute('id', 'close-this')
