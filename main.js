@@ -49,7 +49,7 @@ function addNote(event) {
 
         let close = document.createElement('span')
         close.setAttribute('id', 'close-this')
-        close.innerHTML = `<i class="fas fa-times-circle">`;
+        close.innerHTML = `<i tabindex=0 class="fas fa-times-circle">`;
         newNotePad.appendChild(close);
 
         let theFirstChild = container.firstChild;
@@ -60,6 +60,16 @@ function addNote(event) {
             notes[noteIndex].deleted = true; // tell the array it's deleted
             e.target.parentElement.parentElement.remove();
         });
+
+        document.querySelector('#close-this').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                let noteIndex = e.target.parentElement.parentElement.dataset.index;
+                notes[noteIndex].deleted = true; // tell the array it's deleted
+                e.target.parentElement.parentElement.remove();
+            }
+        });
+
+
         document.getElementById('title').focus();
     }
 
