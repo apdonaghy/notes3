@@ -1,99 +1,101 @@
 let notes = [];
-// let saveArray = [];
-// let getSaveArray = [];
-let container;
-let deleted = false;
+const container = document.querySelector('.wrapper');
 
-function addNote(event) {
-    event.preventDefault();
-    let note = {
-        title: document.getElementById('title').value,
-        copy: document.getElementById('body-copy').value
-    }
-    notes.push(note);
 
-    document.querySelector('form').reset();
 
-    if (note['title'].length !== 0) {
+const closeFunc = function (e) {
+    let noteIndex = e.target.parentElement.parentElement.dataset.index;
+    notes.splice(noteIndex, 1);
+    e.target.parentElement.parentElement.remove();
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
+}
 
+
+
+const createNote = function(note) {
+    if (note['title'] != '') {
+
+        notes.push(note);
+  
+
+        localStorage.setItem("notesStorage", JSON.stringify(notes));
 
         let newNotePad = document.createElement('div');
-        newNotePad.setAttribute('id', 'user-note-pad')
+        newNotePad.setAttribute('class', 'user-note-pad')
         newNotePad.setAttribute('data-index', notes.length - 1);
 
         let newDiv = document.createElement('div');
-        newDiv.setAttribute('id', 'underline');
+        newDiv.setAttribute('class', 'underline');
+        newDiv.setAttribute('data-index', notes.length - 1);
         newNotePad.appendChild(newDiv);
 
         let newH2 = document.createElement('input')
         newH2.setAttribute('type', 'text')
-        newH2.setAttribute('id', 'noteH2')
+        newH2.setAttribute('class', 'noteH2')
         newH2.value = note['title'];
+        newH2.setAttribute('autocomplete', 'off')
+        newH2.addEventListener('change', updateValue);
         newDiv.appendChild(newH2);
+        
 
-
-        newH2.addEventListener('input', function (e) {
-            let newIndex = e.target.parentElement.parentElement.dataset.index;
-            notes[newIndex].title = e.target.value;
-            notes[newIndex].copy = e.target.value;
-        });
-
-        let newP = document.createElement('textarea')
-        newP.setAttribute('id', 'noteP')
+        let newP = document.createElement('textarea');
+        newP.setAttribute('class', 'noteP');
         newP.value = note['copy'];
+        newP.setAttribute('autocomplete', 'off')
+        newP.addEventListener('change', updateValue);
         newNotePad.appendChild(newP);
 
-
         let close = document.createElement('span')
-        close.setAttribute('id', 'close-this')
-        close.innerHTML = `<i class="fas fa-times-circle">`;
+        close.setAttribute('class', 'close-this')
+        close.innerHTML = `<i tabindex=0 class="fas fa-times-circle">`;
         newNotePad.appendChild(close);
 
         let theFirstChild = container.firstChild;
         container.insertBefore(newNotePad, theFirstChild);
 
-        close.addEventListener("click", function (e) {
-            let noteIndex = e.target.parentElement.parentElement.dataset.index;
-            notes[noteIndex].deleted = true; // tell the array it's deleted
-            e.target.parentElement.parentElement.remove();
-        });
-        document.getElementById('title').focus();
+        close.addEventListener("click", closeFunc);
+        close.addEventListener("keypress", closeFunc);
+
+
+        document.querySelector('.title').focus();
     }
+}
+
+const updateValue = function(e){
+    // let changeIndex = e.target.parentElement.dataset.index;
+     console.log(e.target.value)
+}
+
+const getInputValues = function (event) {
+    event.preventDefault();
+
+
+    let singleNote = {
+        title: document.querySelector('.title').value,
+        copy: document.querySelector('.body-copy').value
+    }
+
+    document.querySelector('form').reset();
+    createNote(singleNote)
+
 
 }
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    container = document.querySelector('.wrapper');
-    document.getElementById('btn').addEventListener('click', addNote);
-    document.getElementById('title').focus();
 
-    /* 
-    let getSaveArray = JSON.parse(localStorage.getItem('saveArray'));
-    
-   for (let i = 0; i < getSaveArray.length; i++) {
-            notes.push(getSaveArray[i]);
-        }
-        */
-});
+    const storedNotes = JSON.parse(localStorage.getItem("notesStorage"));
 
-
-/*
-let saveBtn = document.createElement('button');
-saveBtn.setAttribute('type', 'button');
-saveBtn.innerHTML = "save";
-let saveContainer = document.querySelector('#save')
-saveContainer.appendChild(saveBtn);
-
-saveBtn.addEventListener('click', () => {
-
-    for (let i = 0; i < notes.length; i++) {
-        if (notes[i]['deleted'] !== true) {
-            saveArray.push(notes[i]);
-            console.log(saveArray);
-        }
-        localStorage.setItem('saveArray', JSON.stringify(saveArray));
-
+    for (let singleNote in storedNotes) {
+        createNote(storedNotes[singleNote])
     }
-})
-*/
+
+ 
+
+
+    document.querySelector('.btn').addEventListener('click', getInputValues);
+    document.querySelector('.title').focus();
+
+
+
+});
