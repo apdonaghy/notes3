@@ -1,185 +1,101 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Roboto Slab', 'Arial';
-}
+let notes = [];
+const container = document.querySelector('.wrapper');
 
-body {
-    background-color: #1f1d22;
-    padding:5%;
-}
-.wrapper2{
-  max-width:1400px;
-  margin: 0 auto;
-}
-.wrapper {
-    
-    display: flex;
-    justify-content:left;
-    flex-wrap: wrap;
 
-}
 
-h1 {
-    color: #cdff50;
-    font-size: 6em;
-    border-bottom: 1px solid #cdff50;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 4%;
-    
-}
-
-.user-note-pad {
-    border: 1px solid #4a4a4a;
-    border-radius: 7px;
-    width: 31.4%;
-    background-color: #1f1d22;
-    margin: 0.8%;
-    box-shadow: 0px 0px 20px black;
-
-}
-
-form {
-    margin: 10px;
-    margin-bottom: 42px;
-}
-
-textarea {
-    max-width: 95%;
+const closeFunc = function (e) {
+    let noteIndex = e.target.parentElement.parentElement.dataset.index;
+    notes.splice(noteIndex, 1);
+    e.target.parentElement.parentElement.remove();
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
 }
 
 
 
-@media only screen and (max-width: 1100px) {
-    .wrapper {
-    
-        justify-content: space-between;
-        flex-wrap:wrap;
+const createNote = function(note) {
+    if (note['title'] != '') {
 
-    }
-    .user-note-pad {
-        width: 48.2%;
-       
+        notes.push(note);
+  
+
+        localStorage.setItem("notesStorage", JSON.stringify(notes));
+
+        let newNotePad = document.createElement('div');
+        newNotePad.setAttribute('class', 'user-note-pad')
+        newNotePad.setAttribute('data-index', notes.length - 1);
+
+        let newDiv = document.createElement('div');
+        newDiv.setAttribute('class', 'underline');
+        newDiv.setAttribute('data-index', notes.length - 1);
+        newNotePad.appendChild(newDiv);
+
+        let newH2 = document.createElement('input')
+        newH2.setAttribute('type', 'text')
+        newH2.setAttribute('class', 'noteH2')
+        newH2.value = note['title'];
+        newH2.setAttribute('autocomplete', 'off')
+        newH2.addEventListener('change', updateValue);
+        newDiv.appendChild(newH2);
+        
+
+        let newP = document.createElement('textarea');
+        newP.setAttribute('class', 'noteP');
+        newP.value = note['copy'];
+        newP.setAttribute('autocomplete', 'off')
+        newP.addEventListener('change', updateValue);
+        newNotePad.appendChild(newP);
+
+        let close = document.createElement('span')
+        close.setAttribute('class', 'close-this')
+        close.innerHTML = `<i tabindex=0 class="fas fa-times-circle">`;
+        newNotePad.appendChild(close);
+
+        let theFirstChild = container.firstChild;
+        container.insertBefore(newNotePad, theFirstChild);
+
+        close.addEventListener("click", closeFunc);
+        close.addEventListener("keypress", closeFunc);
+
+
+        document.querySelector('.title').focus();
     }
 }
 
+const updateValue = function(e){
+    // let changeIndex = e.target.parentElement.dataset.index;
+     console.log(e.target.value)
+}
 
-@media only screen and (max-width: 700px) {
-    .user-note-pad {
-        width: 100%;
+const getInputValues = function (event) {
+    event.preventDefault();
+
+
+    let singleNote = {
+        title: document.querySelector('.title').value,
+        copy: document.querySelector('.body-copy').value
     }
-}
 
-.noteH2 {
-    color: #cdff50;
-    font-weight: 400;
-    font-size: 1.35em;
-    padding: 10px 20px 10px 20px;
-    background-color:transparent;
-    border: none;
-    border-radius: 10px;
-    width:100%;
-    /* border-bottom: 1px solid #cdff50; */
-   
+    document.querySelector('form').reset();
+    createNote(singleNote)
+
+
 }
 
 
-i {
-    font-size: 3em;
-}
+document.addEventListener('DOMContentLoaded', () => {
 
-.noteP {
-    font-size: 1em;
-    color: #cdff50;
-    font-weight: 200;
-    padding: 20px;
-    background-color:transparent;
-    border: none;
-    width: 100%;
-    min-height: 10em;
-    position:relative;
-    z-index: 0;
-}
+    const storedNotes = JSON.parse(localStorage.getItem("notesStorage"));
 
-input,
-textarea {
-    caret-color: #cdff50;
+    for (let singleNote in storedNotes) {
+        createNote(storedNotes[singleNote])
+    }
 
-}
-
-.btn {
-    transition:.2s;
  
-    background-color: #cdff50;
-    color: #1e1f23;
-    border: none;
-    padding: 0px 15px 0px 15px;
-    border-radius: 5px;
-    font-size: 2em;
-    font-weight: 800;
-    padding-bottom: .1em;
-}
-
-.btn:hover {
-    transition:.2s;
-    background-color: #cdff50;
-    transform:scale(1.1);
-}
-
-.title {
-    background-color: transparent;
-    border: none;
-    font-size: 2.25em;
-    color: gray;
-}
-
-.body-copy {
-    background-color: transparent;
-    border: none;
-    font-size: 1.5em;
-    color: gray;
-    font-weight: 200;
-}
-
-textarea:focus {
-    outline: 0;
-}
-
-input:focus {
-    outline: 0;
-}
-
-i { 
-    transition: .3s;
-    color: #cdff50aa;
-    font-size: 2em;
-    float: right;
-    margin: 10px;
-}
-
-i:hover, i:focus {
-    transition: .3s;
-    color: #cdff50;
-}
 
 
-.underline {
+    document.querySelector('.btn').addEventListener('click', getInputValues);
+    document.querySelector('.title').focus();
 
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.242);   
-    position:relative;
-    z-index: 1;
-}
 
-.add {
-    cursor: pointer;
-}
 
-textarea {
-    resize: none;
-}
-
-.close-this {
-    cursor: pointer;
-}
+});

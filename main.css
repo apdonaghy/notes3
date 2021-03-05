@@ -31,13 +31,8 @@ h1 {
     
 }
 
-<<<<<<< HEAD
 .user-note-pad {
     border: 1px solid #4a4a4a;
-=======
-#user-note-pad {
-    border: 1px solid #cdff50;
->>>>>>> 65dc98f45a7086223de6a193ef7d3b73fce994f1
     border-radius: 7px;
     width: 31.4%;
     background-color: #1f1d22;
@@ -77,11 +72,7 @@ textarea {
     }
 }
 
-<<<<<<< HEAD
 .noteH2 {
-=======
-#noteH2{
->>>>>>> 65dc98f45a7086223de6a193ef7d3b73fce994f1
     color: #cdff50;
     font-weight: 400;
     font-size: 1.35em;
@@ -104,25 +95,17 @@ i {
     color: #cdff50;
     font-weight: 200;
     padding: 20px;
-<<<<<<< HEAD
     background-color:transparent;
     border: none;
     width: 100%;
     min-height: 10em;
     position:relative;
     z-index: 0;
-=======
-    background-color:#27282c;
-    border:none;
-    width:100%;
-    min-height:10em;
->>>>>>> 65dc98f45a7086223de6a193ef7d3b73fce994f1
 }
 
 input,
 textarea {
     caret-color: #cdff50;
-<<<<<<< HEAD
 
 }
 
@@ -131,13 +114,6 @@ textarea {
  
     background-color: #cdff50;
     color: #1e1f23;
-=======
-}
-
-button {
-    background-color: #cdff50;
-    color:#1e1f23;
->>>>>>> 65dc98f45a7086223de6a193ef7d3b73fce994f1
     border: none;
     padding: 0px 15px 0px 15px;
     border-radius: 5px;
@@ -175,7 +151,6 @@ input:focus {
     outline: 0;
 }
 
-<<<<<<< HEAD
 i { 
     transition: .3s;
     color: #cdff50aa;
@@ -198,40 +173,13 @@ i:hover, i:focus {
 }
 
 .add {
-=======
-i{
-    color:#cdff50;
-    font-size:2em;
-    float:right;
-    margin:10px;
-}
-
-i:hover{
-    color:#cdff50;
-}
-
-
-#underline{
-    border-bottom: 1px solid #cdff50;   
-}
-
-.add{
->>>>>>> 65dc98f45a7086223de6a193ef7d3b73fce994f1
     cursor: pointer;
 }
 
 textarea {
     resize: none;
-<<<<<<< HEAD
 }
 
 .close-this {
     cursor: pointer;
 }
-=======
-  }
-
-  #close-this{
-      cursor: pointer;
-  }
->>>>>>> 65dc98f45a7086223de6a193ef7d3b73fce994f1
