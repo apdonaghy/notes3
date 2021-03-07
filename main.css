@@ -19,6 +19,9 @@
     color: var(--bkgrnd)
 }
 
+::placeholder {
+    color:#8b8ba0;
+}
 
 body {
     background-color: var(--bkgrnd);
@@ -55,6 +58,17 @@ h1 {
 form {
     margin: 10px;
     margin-bottom: 42px;
+    border: 1px solid #333348;
+    border-radius: 7px;
+    width: 50%;
+    background-color: var(--bkgrnd);
+    box-shadow: 0px 0px 20px black;
+    padding:20px;
+  
+}
+form input{
+    width:100%;
+    overflow: hidden;
 }
 
 textarea {
@@ -74,12 +88,18 @@ textarea {
         width: 48.2%;
        
     }
+    form{
+        width:75%
+    }
 }
 
 
 @media only screen and (max-width: 700px) {
     .user-note-pad {
         width: 100%;
+    }
+    form{
+        width:98%
     }
 }
 
@@ -122,15 +142,16 @@ textarea {
 
 .btn {
     transition:.2s;
- 
+    box-shadow: 0px 0px 20px black;
     background-color: var(--blue);
     color: var(--bkgrnd);
     border: none;
-    padding: 0px 15px 0px 15px;
-    border-radius: 5px;
+    padding: 2px 12px 0px 12px;
+    border-radius: 50%;
     font-size: 2em;
     font-weight: 800;
     padding-bottom: .1em;
+    float:right;
 }
 
 .btn:hover {
@@ -141,17 +162,22 @@ textarea {
 
 .title {
     background-color: transparent;
+    overflow: hidden;
     border: none;
     font-size: 2.25em;
-    color: gray;
+    color: white;
+    width:100%;
+
 }
 
 .body-copy {
     background-color: transparent;
     border: none;
     font-size: 1.5em;
-    color: gray;
-    font-weight: 200;
+    line-height:1.55em;
+    color: white;
+    font-weight: 300;
+    width:100%;
 }
 
 textarea:focus {
@@ -194,3 +220,12 @@ textarea {
 .close-this {
     cursor: pointer;
 }
+
+.originalNote[contenteditable]:empty::before {
+    content: "Placeholder still possible";
+    color: gray;
+  }
+
+  .originalNote{
+      display:block;
+  }
