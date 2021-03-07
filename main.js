@@ -31,7 +31,7 @@ const createNote = function(note) {
         newH2.setAttribute('class', 'noteH2')
         newH2.value = note['title'];
         newH2.setAttribute('autocomplete', 'off')
-        newH2.addEventListener('change', updateTitleValue);
+        newH2.addEventListener('keypress', updateTitleValue);
         newDiv.appendChild(newH2);
         
 
@@ -39,7 +39,7 @@ const createNote = function(note) {
         newP.setAttribute('class', 'noteP');
         newP.value = note['copy'];
         newP.setAttribute('autocomplete', 'off')
-        newP.addEventListener('change', updateCopyValue);
+        newP.addEventListener('keypress', updateCopyValue);
         newNotePad.appendChild(newP);
 
         let close = document.createElement('span')
@@ -59,13 +59,21 @@ const createNote = function(note) {
 }
 
 const updateTitleValue = function(e){
+
+    setTimeout(function(){ 
      notes[e.target.parentElement.dataset.index]['title'] = e.target.value;
      localStorage.setItem("notesStorage", JSON.stringify(notes));
+     }, 200);
+     
 }
 
 const updateCopyValue = function(e){
-    notes[e.target.parentElement.dataset.index]['copy'] = e.target.value;
-    localStorage.setItem("notesStorage", JSON.stringify(notes));
+
+    setTimeout(function(){ 
+        notes[e.target.parentElement.dataset.index]['copy'] = e.target.value;
+        localStorage.setItem("notesStorage", JSON.stringify(notes));
+        }, 200);
+
 }
 
 const getInputValues = function (event) {
