@@ -22,6 +22,7 @@ const createNote = function(note) {
         let itemDiv = document.createElement('div');
         itemDiv.setAttribute('data-index', notes.length - 1);
         itemDiv.setAttribute('class', `item   class${notes.length - 1}`)
+     
 
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
@@ -41,7 +42,7 @@ const createNote = function(note) {
         newH2.setAttribute('autocomplete', 'off')
         newH2.setAttribute('data-index', notes.length - 1);
         newH2.addEventListener('click', focusIn)
-        newH2.addEventListener('keypress', updateTitleValue);
+        newH2.addEventListener('keydown', updateTitleValue);
         newDiv.appendChild(newH2);
         
         let newP = document.createElement('p');
@@ -52,8 +53,7 @@ const createNote = function(note) {
         newP.setAttribute('role', 'textbox')
         newP.setAttribute('data-index', notes.length - 1);
         newP.addEventListener('click', focusIn)
-        newP.addEventListener('keypress', updateCopyValue);
-        // newP.addEventListener('paste', updateCopyValue);
+        newP.addEventListener('keydown', updateCopyValue);
         newP.addEventListener("paste", sanitizeText);
 
         newNotePad.appendChild(newP);
@@ -111,20 +111,28 @@ const getInputValues = function (event) {
     resizeAllGridItems()
 }
 
-
+const cover = document.querySelector('#cover')
 const focusIn = function(e){
     const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
-    document.getElementById('cover').style.zIndex = "3"
-    document.getElementById('cover').style.opacity = "1"
+    cover.style.display = "block"
+    cover.style.zIndex = "3"
+    setTimeout(function(){ 
+        cover.style.opacity = "1"
+        }, 1);
+
     thisClass.classList.add("centered"); 
 }
 
-const cover = document.querySelector('#cover')
+
 
 const focusOut = function(e){
   
-    cover.style.zIndex = "-1"
+    cover.style.zIndex = "-5"
     cover.style.opacity = "0"
+    setTimeout(function(){ 
+        cover.style.display = "none"
+        }, 200);
+  
     const center = document.querySelector('.centered')
     center.classList.remove("centered");
     resizeAllGridItems()
