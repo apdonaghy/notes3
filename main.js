@@ -1,13 +1,15 @@
 let notes = [];
+let currentLength;
 const container = document.querySelector('.wrapper');
 
 
 
 const closeFunc = function (e) {
-    let noteIndex = e.target.parentElement.parentElement.dataset.index;
-    notes.splice(noteIndex, 1);
+    let noteIndex = e.target.parentElement.dataset.index;
+    notes[noteIndex]['deleted'] = true;
     e.target.parentElement.parentElement.remove();
     localStorage.setItem("notesStorage", JSON.stringify(notes));
+    console.log(notes)
 }
 
 const createNote = function(note) {
@@ -17,42 +19,58 @@ const createNote = function(note) {
 
         localStorage.setItem("notesStorage", JSON.stringify(notes));
 
+        let itemDiv = document.createElement('div');
+        itemDiv.setAttribute('data-index', notes.length - 1);
+        itemDiv.setAttribute('class', `item   class${notes.length - 1}`)
+
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
         newNotePad.setAttribute('data-index', notes.length - 1);
+        newNotePad.addEventListener('click', focusIn);
 
         let newDiv = document.createElement('div');
         newDiv.setAttribute('class', 'underline');
         newDiv.setAttribute('data-index', notes.length - 1);
+        newDiv.addEventListener('click', focusIn)
         newNotePad.appendChild(newDiv);
-
+      
         let newH2 = document.createElement('input')
         newH2.setAttribute('type', 'text')
         newH2.setAttribute('class', 'noteH2')
         newH2.value = note['title'];
         newH2.setAttribute('autocomplete', 'off')
+        newH2.setAttribute('data-index', notes.length - 1);
+        newH2.addEventListener('click', focusIn)
         newH2.addEventListener('keypress', updateTitleValue);
         newDiv.appendChild(newH2);
         
-
-        let newP = document.createElement('textarea');
+        let newP = document.createElement('p');
         newP.setAttribute('class', 'noteP');
-        newP.value = note['copy'];
-        newP.setAttribute('autocomplete', 'off')
+        newP.innerText= note['copy'];
+        // newP.setAttribute('autocomplete', 'off')
+        newP.setAttribute('contenteditable', 'true');
+        newP.setAttribute('role', 'textbox')
+        newP.setAttribute('data-index', notes.length - 1);
+        newP.addEventListener('click', focusIn)
         newP.addEventListener('keypress', updateCopyValue);
+        // newP.addEventListener('paste', updateCopyValue);
+        newP.addEventListener("paste", sanitizeText);
+
         newNotePad.appendChild(newP);
 
+        itemDiv.appendChild(newNotePad);
+
         let close = document.createElement('span')
+        close.setAttribute('data-index', notes.length - 1);
         close.setAttribute('class', 'close-this')
         close.innerHTML = `<i tabindex=0 class="fas fa-times-circle">`;
-        newNotePad.appendChild(close);
+        itemDiv.appendChild(close)
 
         let theFirstChild = container.firstChild;
-        container.insertBefore(newNotePad, theFirstChild);
+        container.insertBefore(itemDiv, theFirstChild);
 
         close.addEventListener("click", closeFunc);
         close.addEventListener("keypress", closeFunc);
-
 
         document.querySelector('.title').focus();
     }
@@ -70,7 +88,8 @@ const updateTitleValue = function(e){
 const updateCopyValue = function(e){
 
     setTimeout(function(){ 
-        notes[e.target.parentElement.dataset.index]['copy'] = e.target.value;
+        notes[e.target.parentElement.dataset.index]['copy'] = e.target.innerText;
+        resizeAllGridItems()
         localStorage.setItem("notesStorage", JSON.stringify(notes));
         }, 200);
 
@@ -82,22 +101,83 @@ const getInputValues = function (event) {
 
     let singleNote = {
         title: document.querySelector('.title').value,
-        copy: document.querySelector('.body-copy').value
+        copy: document.querySelector('.body-copy').innerText,
+        deleted: false
     }
 
     document.querySelector('form').reset();
+    document.querySelector('.body-copy').innerHTML = '';
     createNote(singleNote)
+    resizeAllGridItems()
+}
 
 
+const focusIn = function(e){
+    const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
+    document.getElementById('cover').style.zIndex = "3"
+    document.getElementById('cover').style.opacity = "1"
+    thisClass.classList.add("centered"); 
+}
+
+const cover = document.querySelector('#cover')
+
+const focusOut = function(e){
+  
+    cover.style.zIndex = "-1"
+    cover.style.opacity = "0"
+    const center = document.querySelector('.centered')
+    center.classList.remove("centered");
+    resizeAllGridItems()
+}
+
+cover.addEventListener('click', focusOut)
+
+
+function resizeGridItem(item){
+    grid = document.querySelector(".wrapper");
+    rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+    rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+    rowSpan = Math.ceil((item.querySelector('.user-note-pad').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
+      item.style.gridRowEnd = "span "+rowSpan;
+  }
+  
+  function resizeAllGridItems(){
+    allItems = document.getElementsByClassName("item");
+    for(x=0;x<allItems.length;x++){
+      resizeGridItem(allItems[x]);
+    }
+  }
+  
+
+const sanitizeText = function(e) {
+    // cancel paste
+    e.preventDefault();
+
+    // get text representation of clipboard
+    var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+
+    // insert text manually
+    document.execCommand("insertHTML", false, text);
+    KeyboardEvent('keydown',{'keyCode':32,'which':32})
 }
 
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const storedNotes = JSON.parse(localStorage.getItem("notesStorage"));
+    document.querySelector('.originalNote').addEventListener("paste", sanitizeText);
 
-    for (let singleNote in storedNotes) {
-        createNote(storedNotes[singleNote])
+    let newStore = [];
+    const storedNotes = JSON.parse(localStorage.getItem("notesStorage"));
+    for(let note in storedNotes){
+
+     if(storedNotes[note]['deleted'] === false){
+            newStore.push(storedNotes[note])
+        }
+        
+     }
+
+    for (let singleNote in newStore) {
+        createNote(newStore[singleNote])
     }
 
  
@@ -106,6 +186,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.btn').addEventListener('click', getInputValues);
     document.querySelector('.title').focus();
 
+ 
+      
+      window.onload = resizeAllGridItems();
+      window.addEventListener("resize", resizeAllGridItems);
 
 
 });

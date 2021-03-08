@@ -3,12 +3,15 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Work Sans', sans-serif;
+    text-rendering:optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+    caret-color: var(--blue); 
 }
 
 
 
 :root{
-    --bkgrnd: #15151b;
+    --bkgrnd: #1a1a21;
     --blue:#51a3ff;
     --green:#7fce6d;
     --red:#f67f80;
@@ -31,40 +34,49 @@ body {
   max-width:1400px;
   margin: 0 auto;
 }
+.item{
+    /* display:block;
+    position:relative; */
+    border: 1px solid #333348;
+    border-radius: 7px;
+    /* width: 31.4%; */
+    background-color: var(--bkgrnd);
+    /* margin: 0.8%; */
+    box-shadow: 0px 0px 20px black;
+    max-height: auto;
+}
 .wrapper {
-    
-    display: flex;
-    justify-content:left;
-    flex-wrap: wrap;
+
+        display: grid;
+        grid-gap: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+        grid-auto-rows: 20px;
+
 
 }
 
 h1 {
     width:5em;
-    padding:10px;
+    margin-bottom:40px;
     
 }
 
 .user-note-pad {
-    border: 1px solid #333348;
-    border-radius: 7px;
-    width: 31.4%;
-    background-color: var(--bkgrnd);
-    margin: 0.8%;
-    box-shadow: 0px 0px 20px black;
+ 
+
 
 }
 
 form {
-    margin: 10px;
-    margin-bottom: 42px;
+   
+    margin-bottom: 60px;
     border: 1px solid #333348;
     border-radius: 7px;
     width: 50%;
     background-color: var(--bkgrnd);
     box-shadow: 0px 0px 20px black;
     padding:20px;
-  
+
 }
 form input{
     width:100%;
@@ -85,7 +97,7 @@ textarea {
 
     }
     .user-note-pad {
-        width: 48.2%;
+        /* width: 48.2%; */
        
     }
     form{
@@ -96,10 +108,10 @@ textarea {
 
 @media only screen and (max-width: 700px) {
     .user-note-pad {
-        width: 100%;
+        /* width: 100%; */
     }
     form{
-        width:98%
+        width:100%
     }
 }
 
@@ -129,9 +141,14 @@ i {
     background-color:transparent;
     border: none;
     width: 100%;
-    min-height: 10em;
+    outline:none;
     position:relative;
     z-index: 0;
+    display: block;
+    line-height: 1.35em;
+    max-height: 500px;
+    overflow: scroll;
+   
 }
 
 input,
@@ -146,10 +163,11 @@ textarea {
     background-color: var(--blue);
     color: var(--bkgrnd);
     border: none;
-    padding: 2px 12px 0px 12px;
+    line-height:1em;
+    padding: 2px 13px 0px 13px;
     border-radius: 50%;
-    font-size: 2em;
-    font-weight: 800;
+    font-size: 3em;
+    font-weight: 300;
     padding-bottom: .1em;
     float:right;
 }
@@ -174,7 +192,7 @@ textarea {
     background-color: transparent;
     border: none;
     font-size: 1.5em;
-    line-height:1.55em;
+    line-height:1.5em;
     color: white;
     font-weight: 300;
     width:100%;
@@ -192,8 +210,8 @@ i {
     transition: .3s;
     color: #4085d5;
     font-size: 2em;
-    float: right;
-    margin: 10px;
+   
+    /* margin: 10px; */
 }
 
 i:hover, i:focus {
@@ -219,13 +237,44 @@ textarea {
 
 .close-this {
     cursor: pointer;
+    float: right;
+    margin-top:-4%;
 }
 
 .originalNote[contenteditable]:empty::before {
-    content: "Placeholder still possible";
-    color: gray;
+    content: "Note";
+    color: #8b8ba0;;
   }
 
   .originalNote{
       display:block;
+      caret-color: var(--blue);
+      outline:none;
+  }
+
+  #coverLower{
+      position:relative;
+  }
+
+  #cover{
+      transition:.4s;
+      position:relative;
+      background-color:rgba(9, 9, 16, 0.7);
+      opacity: 0;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index:-1;
+  }
+
+  .centered {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 4;
+    width:40%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
   }
