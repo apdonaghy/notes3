@@ -7,7 +7,7 @@ const container = document.querySelector('.wrapper');
 const closeFunc = function (e) {
     let noteIndex = e.target.parentElement.dataset.index;
     notes[noteIndex]['deleted'] = true;
-    e.target.parentElement.parentElement.remove();
+    e.target.parentElement.parentElement.parentElement.remove();
     localStorage.setItem("notesStorage", JSON.stringify(notes));
     console.log(notes)
     cover.style.zIndex = "-5"
@@ -16,6 +16,52 @@ const closeFunc = function (e) {
         cover.style.display = "none"
         }, 200);
 }
+
+
+const original = function(e){
+    notes[e.target.dataset.index]['color'] = "standard";
+    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
+    thisClassOriginal.style.color = 'white';
+    thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
+    thisClassOriginal.querySelector('.noteH2').style.color = "white";
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
+
+}
+
+
+const redCircleChange = function(e){
+    notes[e.target.dataset.index]['color'] = "red";
+    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
+    thisClassOriginal.style.color = 'var(--bkgrnd)';
+    thisClassOriginal.style.backgroundColor = 'var(--red)';
+    thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
+
+}
+
+
+const greenCircleChange = function(e){
+    notes[e.target.dataset.index]['color'] = "green";
+    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
+    thisClassOriginal.style.color = 'var(--bkgrnd)';
+    thisClassOriginal.style.backgroundColor = 'var(--green)';
+    thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
+
+}
+
+
+const blueCircleChange = function(e){
+    notes[e.target.dataset.index]['color'] = "blue";
+    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
+    thisClassOriginal.style.color = 'var(--bkgrnd)';
+    thisClassOriginal.style.backgroundColor = 'var(--blue)';
+    thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
+}
+
+
+
 
 
 
@@ -29,7 +75,7 @@ const createNote = function(note) {
         let itemDiv = document.createElement('div');
         itemDiv.setAttribute('data-index', notes.length - 1);
         itemDiv.setAttribute('class', `item   class${notes.length - 1}`)
-        
+
 
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
@@ -66,14 +112,68 @@ const createNote = function(note) {
         
         itemDiv.appendChild(newNotePad);
 
+
+        let optionsContainer = document.createElement('div');
+        optionsContainer.setAttribute('class', "optionsContainer")
+
+        let originalCircle = document.createElement('span')
+        originalCircle.setAttribute('class', 'original')
+        originalCircle.setAttribute('data-index', notes.length - 1);
+        originalCircle.addEventListener('click', original)
+        optionsContainer.appendChild(originalCircle)
+
+
+        let blueCircle = document.createElement('span')
+        blueCircle.setAttribute('class', 'blueCircle')
+        blueCircle.setAttribute('data-index', notes.length - 1);
+        blueCircle.addEventListener('click', blueCircleChange)
+        optionsContainer.appendChild(blueCircle)
+
+        let redCircle = document.createElement('span')
+        redCircle.setAttribute('class', 'redCircle')
+        redCircle.setAttribute('data-index', notes.length - 1);
+        redCircle.addEventListener('click', redCircleChange)
+        optionsContainer.appendChild(redCircle)
+
+        let greenCircle = document.createElement('span')
+        greenCircle.setAttribute('class', 'greenCircle')
+        greenCircle.setAttribute('data-index', notes.length - 1);
+        greenCircle.addEventListener('click', greenCircleChange)
+        optionsContainer.appendChild(greenCircle)
+
         let close = document.createElement('span')
         close.setAttribute('data-index', notes.length - 1);
         close.setAttribute('class', 'close-this')
         close.innerHTML = `<i tabindex=0 class="fas fa-times-circle">`;
-        itemDiv.appendChild(close)
+        
+        optionsContainer.appendChild(close)
+
+        itemDiv.appendChild(optionsContainer)
 
         let theFirstChild = container.firstChild;
         container.insertBefore(itemDiv, theFirstChild);
+
+        if(note['color'] === 'standard'){
+            let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+            thisClassOriginal.style.color = 'white';
+            thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
+            thisClassOriginal.querySelector('.noteH2').style.color = "white";
+        }else if(note['color'] === 'red'){
+                let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+                thisClassOriginal.style.color = 'var(--bkgrnd)';
+                thisClassOriginal.style.backgroundColor = 'var(--red)';
+                thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+        }else if(note['color'] === 'green'){
+            let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+            thisClassOriginal.style.color = 'var(--bkgrnd)';
+            thisClassOriginal.style.backgroundColor = 'var(--green)';
+            thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+        }else if(note['color'] === 'blue'){
+            let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+            thisClassOriginal.style.color = 'var(--bkgrnd)';
+            thisClassOriginal.style.backgroundColor = 'var(--blue)';
+            thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+        }
 
         close.addEventListener("click", closeFunc);
         close.addEventListener("keypress", closeFunc);
@@ -109,7 +209,8 @@ const getInputValues = function (event) {
     let singleNote = {
         title: document.querySelector('.title').value,
         copy: document.querySelector('.body-copy').innerText,
-        deleted: false
+        deleted: false,
+        color: "standard"
     }
 
     document.querySelector('form').reset();
@@ -119,11 +220,13 @@ const getInputValues = function (event) {
 }
 
 const cover = document.querySelector('#cover')
+
 const focusIn = function(e){
     currentIndex = e.target.dataset.index;
     console.log(currentIndex)
     const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
-    thisClass.querySelector('.noteP').style.overflow = 'scroll'
+    thisClass.querySelector('.noteP').style.overflow = 'scroll';
+    thisClass.querySelector('.optionsContainer').style.display = "block";
     cover.style.display = "block"
     cover.style.zIndex = "3"
     setTimeout(function(){ 
@@ -139,6 +242,7 @@ const focusOut = function(e){
     focusIndex = document.querySelector(`.class${currentIndex}`)
     focusIndex.querySelector('.noteP').innerText = notes[currentIndex]['copy']
     focusIndex.querySelector('.noteP').style.overflow = 'hidden'
+    focusIndex.querySelector('.optionsContainer').style.display = "none";
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
     setTimeout(function(){ 

@@ -35,14 +35,10 @@ body {
   margin: 0 auto;
 }
 .item{
-    /* transition:.2s; */
-    /* display:block;
-    position:relative; */
+
     border: 1px solid #333348;
     border-radius: 7px;
-    /* width: 31.4%; */
-    background-color: var(--bkgrnd);
-    /* margin: 0.8%; */
+    /* background-color: var(--bkgrnd); */
     box-shadow: 0px 0px 20px black;
     max-height: auto;
 }
@@ -124,7 +120,6 @@ textarea {
 }
 
 .noteH2 {
-    color: white;
     font-weight: 400;
     font-size: 1.35em;
     padding: 10px 20px 10px 20px;
@@ -143,7 +138,6 @@ i {
 
 .noteP {
     font-size: 1em;
-    color: white;
     font-weight: 500;
     padding: 20px;
     background-color:transparent;
@@ -154,7 +148,7 @@ i {
     z-index: 0;
     display: block;
     line-height: 1.35em;
-    max-height: 500px;
+    max-height: 70vh;
     overflow:hidden;
 
 }
@@ -216,8 +210,9 @@ input:focus {
 
 i { 
     transition: .3s;
-    color: #4085d5;
-    font-size: 2em;
+    color: white;
+    font-size: 1.5em;
+    padding-right:5px;
    
     /* margin: 10px; */
 }
@@ -246,7 +241,7 @@ textarea {
 .close-this {
     cursor: pointer;
     float: right;
-    margin-top:-4%;
+    /* margin-top:-4%; */
 }
 
 .originalNote[contenteditable]:empty::before {
@@ -287,3 +282,66 @@ textarea {
     /* bring your own prefixes */
     transform: translate(-50%, -50%);
   }
+
+  @media only screen and (max-width: 900px) {
+    .centered {
+        width:60%;
+      }
+  }
+
+
+  @media only screen and (max-width: 600px) {
+    .centered {
+        width:80%;
+      }
+  }
+
+  .optionsContainer{
+      display:none;
+  }
+
+  .redCircle{
+      background-color: var(--red);
+      display:inline-block;
+      height:1.5em;
+      width:1.5em;
+      border:2px solid #34343f;
+      border-radius: 50%;
+      cursor:pointer;
+      margin:1px;
+  }
+
+  .original{
+    background-color: var(--bkgrnd);
+    display:inline-block;
+    height:1.5em;
+    width:1.5em;
+    border:2px solid #34343f;
+    border-radius: 50%;
+    cursor:pointer;
+    margin:1px;
+}
+
+
+.greenCircle{
+    background-color: var(--green);
+    display:inline-block;
+    height:1.5em;
+    width:1.5em;
+    border:2px solid #34343f;
+    border-radius: 50%;
+    cursor:pointer;
+    margin:1px;
+}
+
+
+.blueCircle{
+    background-color: var(--blue);
+    display:inline-block;
+    height:1.5em;
+    width:1.5em;
+    border:2px solid #34343f;
+    border-radius: 50%;
+    cursor:pointer;
+    margin:1px;
+}
