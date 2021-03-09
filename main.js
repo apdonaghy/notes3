@@ -1,5 +1,5 @@
 let notes = [];
-let currentLength;
+let currentIndex;
 const container = document.querySelector('.wrapper');
 
 
@@ -10,7 +10,14 @@ const closeFunc = function (e) {
     e.target.parentElement.parentElement.remove();
     localStorage.setItem("notesStorage", JSON.stringify(notes));
     console.log(notes)
+    cover.style.zIndex = "-5"
+    cover.style.opacity = "0"
+    setTimeout(function(){ 
+        cover.style.display = "none"
+        }, 200);
 }
+
+
 
 const createNote = function(note) {
     if (note['title'] != '') {
@@ -22,7 +29,7 @@ const createNote = function(note) {
         let itemDiv = document.createElement('div');
         itemDiv.setAttribute('data-index', notes.length - 1);
         itemDiv.setAttribute('class', `item   class${notes.length - 1}`)
-     
+        
 
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
@@ -55,9 +62,8 @@ const createNote = function(note) {
         newP.addEventListener('click', focusIn)
         newP.addEventListener('keydown', updateCopyValue);
         newP.addEventListener("paste", sanitizeText);
-
         newNotePad.appendChild(newP);
-
+        
         itemDiv.appendChild(newNotePad);
 
         let close = document.createElement('span')
@@ -76,6 +82,8 @@ const createNote = function(note) {
     }
 }
 
+
+
 const updateTitleValue = function(e){
 
     setTimeout(function(){ 
@@ -92,7 +100,6 @@ const updateCopyValue = function(e){
         resizeAllGridItems()
         localStorage.setItem("notesStorage", JSON.stringify(notes));
         }, 200);
-
 }
 
 const getInputValues = function (event) {
@@ -113,7 +120,10 @@ const getInputValues = function (event) {
 
 const cover = document.querySelector('#cover')
 const focusIn = function(e){
+    currentIndex = e.target.dataset.index;
+    console.log(currentIndex)
     const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
+    thisClass.querySelector('.noteP').style.overflow = 'scroll'
     cover.style.display = "block"
     cover.style.zIndex = "3"
     setTimeout(function(){ 
@@ -126,7 +136,9 @@ const focusIn = function(e){
 
 
 const focusOut = function(e){
-  
+    focusIndex = document.querySelector(`.class${currentIndex}`)
+    focusIndex.querySelector('.noteP').innerText = notes[currentIndex]['copy']
+    focusIndex.querySelector('.noteP').style.overflow = 'hidden'
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
     setTimeout(function(){ 
