@@ -5,7 +5,7 @@
     font-family: 'Work Sans', sans-serif;
     text-rendering:optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
-    caret-color: var(--blue); 
+ 
 }
 
 
@@ -36,7 +36,7 @@ body {
 }
 .item{
 
-    border: 1px solid #333348;
+    border: 1px solid rgba(255,255,255, 0.4);
     border-radius: 7px;
     /* background-color: var(--bkgrnd); */
     box-shadow: 0px 0px 20px black;
@@ -45,7 +45,7 @@ body {
 
 .item:hover{
     transition:.2s;
-    border: 1px solid #5b5b68;
+    border: 1px solid #ffffff;
 
 }
 
@@ -53,7 +53,7 @@ body {
 
         display: grid;
         grid-gap: 15px;
-        grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
         grid-auto-rows: 20px;
 
 
@@ -66,21 +66,19 @@ h1 {
 }
 
 .user-note-pad {
- 
-
 
 }
 
 form {
    
     margin-bottom: 60px;
-    border: 1px solid #333348;
+    border: 1px solid #4f4f65;
     border-radius: 7px;
     width: 50%;
     background-color: var(--bkgrnd);
     box-shadow: 0px 0px 20px black;
     padding:20px;
-
+    caret-color: var(--blue); 
 }
 form input{
     width:100%;
@@ -117,6 +115,14 @@ textarea {
     form{
         width:100%
     }
+
+    .wrapper {
+
+
+        grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+       
+
+}
 }
 
 .noteH2 {
@@ -150,15 +156,18 @@ i {
     line-height: 1.35em;
     max-height: 70vh;
     overflow:hidden;
-
+    margin-bottom:30px;
 }
 
 input,
 textarea {
-    caret-color: var(--blue);
+    /* caret-color: var(--blue); */
 
 }
 
+button{
+    outline:none;
+}
 .btn {
     transition:.2s;
     box-shadow: 0px 0px 20px black;
@@ -178,6 +187,10 @@ textarea {
     transition:.2s;
     background-color: var(--blue);
     transform:scale(1.1);
+}
+
+.btn:focus{
+    border:solid 2px white;
 }
 
 .title {
@@ -210,22 +223,22 @@ input:focus {
 
 i { 
     transition: .3s;
-    color: white;
-    font-size: 1.5em;
-    padding-right:5px;
-   
-    /* margin: 10px; */
+    /* color: white; */
+    font-size: 1.25em;
+ 
+    margin: 5px;
 }
 
 i:hover, i:focus {
     transition: .3s;
-    color: var(--blue);
+    opacity:.7;
+    cursor:pointer;
 }
 
 
 .underline {
 
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, .4);   
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, .6);   
     position:relative;
     z-index: 1;
 }
@@ -240,7 +253,7 @@ textarea {
 
 .close-this {
     cursor: pointer;
-    float: right;
+
     /* margin-top:-4%; */
 }
 
@@ -271,6 +284,8 @@ textarea {
       top: 0;
       left: 0;
       z-index:-1;
+      filter: blur(8px);
+      -webkit-filter: blur(8px);
   }
 
   .centered {
@@ -298,6 +313,26 @@ textarea {
 
   .optionsContainer{
       display:none;
+      height: 30px;
+      width:100%;
+      position:absolute;
+      bottom:0;
+      /* background-color: rgba(0,0,0, 0.7); */
+      border-radius: 0px 0px 7px 7px;
+      padding:0px 15px 0px 15px;
+
+  }
+
+  .colorContainer{
+      background-color: var(--bkgrnd);
+      padding:7px 7px 4px 7px;
+      border-radius: 5px;
+      border: 1px solid rgba(255,255,255, 0.4);
+      position:absolute;
+      bottom:0;
+      margin-bottom:30px;
+      margin-left:20px;
+      display:none;
   }
 
   .redCircle{
@@ -305,43 +340,64 @@ textarea {
       display:inline-block;
       height:1.5em;
       width:1.5em;
-      border:2px solid #34343f;
+      border: 1px solid rgba(255,255,255, 0.3);
       border-radius: 50%;
       cursor:pointer;
       margin:1px;
   }
+
+  .redCircle:hover, .redCircle:focus{
+    transition:.2s;
+    border: 1px solid white;
+}
+
 
   .original{
     background-color: var(--bkgrnd);
     display:inline-block;
     height:1.5em;
     width:1.5em;
-    border:2px solid #34343f;
+    border: 1px solid rgba(255,255,255, 0.3 );
     border-radius: 50%;
     cursor:pointer;
     margin:1px;
 }
 
+.original:hover, .original:focus{
+    transition:.2s;
+    border: 1px solid white;
+}
 
 .greenCircle{
     background-color: var(--green);
     display:inline-block;
     height:1.5em;
     width:1.5em;
-    border:2px solid #34343f;
+    border: 1px solid rgba(255,255,255, 0.3 );
     border-radius: 50%;
     cursor:pointer;
     margin:1px;
 }
 
+.greenCircle:hover, .greenCircle:focus{
+    transition:.2s;
+    border: 1px solid white;
+}
+
 
 .blueCircle{
+
     background-color: var(--blue);
     display:inline-block;
     height:1.5em;
     width:1.5em;
-    border:2px solid #34343f;
+    border: 1px solid rgba(255,255,255, 0.3 );
     border-radius: 50%;
     cursor:pointer;
     margin:1px;
+}
+
+.blueCircle:hover, .blueCircle:focus{
+    transition:.2s;
+    border: 1px solid white;
 }

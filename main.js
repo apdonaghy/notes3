@@ -25,7 +25,7 @@ const original = function(e){
     thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
     thisClassOriginal.querySelector('.noteH2').style.color = "white";
     localStorage.setItem("notesStorage", JSON.stringify(notes));
-
+    
 }
 
 
@@ -35,6 +35,8 @@ const redCircleChange = function(e){
     thisClassOriginal.style.color = 'var(--bkgrnd)';
     thisClassOriginal.style.backgroundColor = 'var(--red)';
     thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+    thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 
 }
@@ -46,6 +48,8 @@ const greenCircleChange = function(e){
     thisClassOriginal.style.color = 'var(--bkgrnd)';
     thisClassOriginal.style.backgroundColor = 'var(--green)';
     thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+    thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 
 }
@@ -57,13 +61,26 @@ const blueCircleChange = function(e){
     thisClassOriginal.style.color = 'var(--bkgrnd)';
     thisClassOriginal.style.backgroundColor = 'var(--blue)';
     thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+    thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 }
 
 
 
+const colorSymbolHover = function(e){
+    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
+    thisClassOriginal.querySelector('.colorContainer').style.display = "inline-block";
+}
 
 
+
+const colorSymbolOut = function(e){
+    let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
+    if(document.querySelectorAll('.colorContainer')){
+    thisClassOriginal.querySelector('.colorContainer').style.display = "none";
+}
+}
 
 const createNote = function(note) {
     if (note['title'] != '') {
@@ -81,6 +98,7 @@ const createNote = function(note) {
         newNotePad.setAttribute('class', 'user-note-pad')
         newNotePad.setAttribute('data-index', notes.length - 1);
         newNotePad.addEventListener('click', focusIn);
+
 
         let newDiv = document.createElement('div');
         newDiv.setAttribute('class', 'underline');
@@ -113,33 +131,48 @@ const createNote = function(note) {
         itemDiv.appendChild(newNotePad);
 
 
-        let optionsContainer = document.createElement('div');
-        optionsContainer.setAttribute('class', "optionsContainer")
+     
+
+        let colorContainer = document.createElement('div')
+        colorContainer.setAttribute('class', 'colorContainer');
+        
 
         let originalCircle = document.createElement('span')
         originalCircle.setAttribute('class', 'original')
         originalCircle.setAttribute('data-index', notes.length - 1);
         originalCircle.addEventListener('click', original)
-        optionsContainer.appendChild(originalCircle)
+        colorContainer.appendChild(originalCircle)
 
 
         let blueCircle = document.createElement('span')
         blueCircle.setAttribute('class', 'blueCircle')
         blueCircle.setAttribute('data-index', notes.length - 1);
         blueCircle.addEventListener('click', blueCircleChange)
-        optionsContainer.appendChild(blueCircle)
+        colorContainer.appendChild(blueCircle)
 
         let redCircle = document.createElement('span')
         redCircle.setAttribute('class', 'redCircle')
         redCircle.setAttribute('data-index', notes.length - 1);
         redCircle.addEventListener('click', redCircleChange)
-        optionsContainer.appendChild(redCircle)
+        colorContainer.appendChild(redCircle)
 
         let greenCircle = document.createElement('span')
         greenCircle.setAttribute('class', 'greenCircle')
         greenCircle.setAttribute('data-index', notes.length - 1);
         greenCircle.addEventListener('click', greenCircleChange)
-        optionsContainer.appendChild(greenCircle)
+        colorContainer.appendChild(greenCircle)
+
+        itemDiv.appendChild(colorContainer)
+
+        let optionsContainer = document.createElement('div');
+        optionsContainer.setAttribute('class', "optionsContainer")
+
+        let colorSymbol = document.createElement('i')
+        colorSymbol.setAttribute('class', 'fas fa-palette')
+        colorSymbol.setAttribute('data-index', notes.length - 1);
+        colorSymbol.addEventListener('mouseover', colorSymbolHover)
+        colorSymbol.addEventListener('focus', colorSymbolHover)
+        optionsContainer.appendChild(colorSymbol)
 
         let close = document.createElement('span')
         close.setAttribute('data-index', notes.length - 1);
@@ -158,21 +191,30 @@ const createNote = function(note) {
             thisClassOriginal.style.color = 'white';
             thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
             thisClassOriginal.querySelector('.noteH2').style.color = "white";
+
         }else if(note['color'] === 'red'){
                 let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
                 thisClassOriginal.style.color = 'var(--bkgrnd)';
                 thisClassOriginal.style.backgroundColor = 'var(--red)';
                 thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+                thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+                thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
         }else if(note['color'] === 'green'){
             let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
             thisClassOriginal.style.color = 'var(--bkgrnd)';
             thisClassOriginal.style.backgroundColor = 'var(--green)';
             thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+            thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+            thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+
         }else if(note['color'] === 'blue'){
             let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
             thisClassOriginal.style.color = 'var(--bkgrnd)';
             thisClassOriginal.style.backgroundColor = 'var(--blue)';
             thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+            thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+            thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+
         }
 
         close.addEventListener("click", closeFunc);
@@ -227,13 +269,17 @@ const focusIn = function(e){
     const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
     thisClass.querySelector('.noteP').style.overflow = 'scroll';
     thisClass.querySelector('.optionsContainer').style.display = "block";
+    thisClass.querySelector('.user-note-pad').addEventListener('mouseover', colorSymbolOut);
     cover.style.display = "block"
     cover.style.zIndex = "3"
+    cover.addEventListener('mouseover', colorSymbolOut);
     setTimeout(function(){ 
         cover.style.opacity = "1"
         }, 1);
 
     thisClass.classList.add("centered"); 
+    // document.querySelector('.item').style.filter = "blur(8px)"
+   
 }
 
 
@@ -251,6 +297,7 @@ const focusOut = function(e){
   
     const center = document.querySelector('.centered')
     center.classList.remove("centered");
+
     resizeAllGridItems()
 }
 
@@ -282,7 +329,7 @@ const sanitizeText = function(e) {
 
     // insert text manually
     document.execCommand("insertHTML", false, text);
-    KeyboardEvent('keydown',{'keyCode':32,'which':32})
+    new KeyboardEvent('keydown',{'keyCode':32,'which':32})
 }
 
 
