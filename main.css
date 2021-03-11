@@ -253,7 +253,7 @@ textarea {
 
 .close-this {
     cursor: pointer;
-
+    /* padding:1px; */
     /* margin-top:-4%; */
 }
 
@@ -335,6 +335,24 @@ textarea {
       display:none;
   }
 
+  .closeContainer{
+    background-color: var(--bkgrnd);
+    padding:7px 7px 4px 7px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255, 0.4);
+    position:absolute;
+    bottom:0;
+    margin-bottom:30px;
+    margin-left:27px;
+    color:white;
+    cursor:pointer;
+    display:none;
+}
+
+.closeContainer:hover{
+    background-color: #30303a;
+}
+
   .redCircle{
       background-color: var(--red);
       display:inline-block;
@@ -386,7 +404,6 @@ textarea {
 
 
 .blueCircle{
-
     background-color: var(--blue);
     display:inline-block;
     height:1.5em;

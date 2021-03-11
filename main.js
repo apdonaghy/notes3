@@ -1,13 +1,17 @@
 let notes = [];
 let currentIndex;
 const container = document.querySelector('.wrapper');
-
+const cover = document.querySelector('#cover')
 
 
 const closeFunc = function (e) {
-    let noteIndex = e.target.parentElement.dataset.index;
+    let noteIndex = e.target.dataset.index;
     notes[noteIndex]['deleted'] = true;
-    e.target.parentElement.parentElement.parentElement.remove();
+    document.querySelector(`.class${currentIndex}`).querySelector('.user-note-pad').removeEventListener( 'mouseover', colorSymbolOut);
+    document.querySelector(`.class${currentIndex}`).querySelector('.close-this').removeEventListener('mouseover', colorSymbolOut);
+    cover.removeEventListener('mouseover', colorSymbolOut);
+    document.querySelector(`.class${currentIndex}`).querySelector('.close-this').removeEventListener('mouseover', colorSymbolOut);
+    e.target.parentElement.remove();
     localStorage.setItem("notesStorage", JSON.stringify(notes));
     console.log(notes)
     cover.style.zIndex = "-5"
@@ -80,6 +84,16 @@ const colorSymbolOut = function(e){
     if(document.querySelectorAll('.colorContainer')){
     thisClassOriginal.querySelector('.colorContainer').style.display = "none";
 }
+}
+
+const showDelete = function(e){
+    let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
+    thisClassOriginal.querySelector('.closeContainer').style.display = "inline-block";
+}
+
+const dontShowDelete = function(e){
+    let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
+    thisClassOriginal.querySelector('.closeContainer').style.display = "none";
 }
 
 const createNote = function(note) {
@@ -178,6 +192,16 @@ const createNote = function(note) {
         close.setAttribute('data-index', notes.length - 1);
         close.setAttribute('class', 'close-this')
         close.innerHTML = `<i tabindex=0 class="fas fa-times-circle">`;
+        close.addEventListener('mouseover', showDelete)
+        // close.addEventListener('mouseout', dontShowDelete)
+
+        let closeText = document.createElement('p')
+        closeText.setAttribute('class', 'closeContainer')
+        closeText.setAttribute('data-index', notes.length - 1);
+        closeText.addEventListener('mouseout', dontShowDelete)
+        closeText.innerText = 'Delete';
+
+        itemDiv.appendChild(closeText);
         
         optionsContainer.appendChild(close)
 
@@ -217,9 +241,7 @@ const createNote = function(note) {
 
         }
 
-        close.addEventListener("click", closeFunc);
-        close.addEventListener("keypress", closeFunc);
-
+        closeText.addEventListener("click", closeFunc);
         document.querySelector('.title').focus();
     }
 }
@@ -261,7 +283,7 @@ const getInputValues = function (event) {
     resizeAllGridItems()
 }
 
-const cover = document.querySelector('#cover')
+
 
 const focusIn = function(e){
     currentIndex = e.target.dataset.index;
@@ -270,6 +292,8 @@ const focusIn = function(e){
     thisClass.querySelector('.noteP').style.overflow = 'scroll';
     thisClass.querySelector('.optionsContainer').style.display = "block";
     thisClass.querySelector('.user-note-pad').addEventListener('mouseover', colorSymbolOut);
+    thisClass.querySelector('.fa-palette').addEventListener('mouseover', dontShowDelete);
+    thisClass.querySelector('.close-this').addEventListener('mouseover', colorSymbolOut);
     cover.style.display = "block"
     cover.style.zIndex = "3"
     cover.addEventListener('mouseover', colorSymbolOut);
@@ -289,6 +313,7 @@ const focusOut = function(e){
     focusIndex.querySelector('.noteP').innerText = notes[currentIndex]['copy']
     focusIndex.querySelector('.noteP').style.overflow = 'hidden'
     focusIndex.querySelector('.optionsContainer').style.display = "none";
+    focusIndex.querySelector('.closeContainer').style.display = "none";
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
     setTimeout(function(){ 
