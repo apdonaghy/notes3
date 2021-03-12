@@ -4,36 +4,48 @@ const container = document.querySelector('.wrapper');
 const cover = document.querySelector('#cover')
 
 
+const checkForLinks = function() {
+    var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    var regex = new RegExp(expression);
+    var t = document.querySelector(`.class${currentIndex}`).querySelector('.noteP').innerText
+    console.log(t)
+    if (t.match(regex)) {
+        console.log(t.match(regex)[0])
+    } else {
+        console.log('no link here')
+    }
+}
+
 const closeFunc = function (e) {
     let noteIndex = e.target.dataset.index;
     notes[noteIndex]['deleted'] = true;
-    document.querySelector(`.class${currentIndex}`).querySelector('.user-note-pad').removeEventListener( 'mouseover', colorSymbolOut);
+    document.querySelector(`.class${currentIndex}`).querySelector('.user-note-pad').removeEventListener('mouseover', colorSymbolOut);
     document.querySelector(`.class${currentIndex}`).querySelector('.close-this').removeEventListener('mouseover', colorSymbolOut);
-    cover.removeEventListener('mouseover', colorSymbolOut);
+    cover.removeEventListener('mouseover', colorSymbolAndDeleteOut);
     document.querySelector(`.class${currentIndex}`).querySelector('.close-this').removeEventListener('mouseover', colorSymbolOut);
     e.target.parentElement.remove();
     localStorage.setItem("notesStorage", JSON.stringify(notes));
     console.log(notes)
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
-    setTimeout(function(){ 
+    setTimeout(function () {
         cover.style.display = "none"
-        }, 200);
+    }, 200);
 }
 
 
-const original = function(e){
+const original = function (e) {
     notes[e.target.dataset.index]['color'] = "standard";
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
     thisClassOriginal.style.color = 'white';
     thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
     thisClassOriginal.querySelector('.noteH2').style.color = "white";
     localStorage.setItem("notesStorage", JSON.stringify(notes));
-    
+
 }
 
 
-const redCircleChange = function(e){
+const redCircleChange = function (e) {
     notes[e.target.dataset.index]['color'] = "red";
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
     thisClassOriginal.style.color = 'var(--bkgrnd)';
@@ -46,7 +58,7 @@ const redCircleChange = function(e){
 }
 
 
-const greenCircleChange = function(e){
+const greenCircleChange = function (e) {
     notes[e.target.dataset.index]['color'] = "green";
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
     thisClassOriginal.style.color = 'var(--bkgrnd)';
@@ -59,7 +71,7 @@ const greenCircleChange = function(e){
 }
 
 
-const blueCircleChange = function(e){
+const blueCircleChange = function (e) {
     notes[e.target.dataset.index]['color'] = "blue";
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
     thisClassOriginal.style.color = 'var(--bkgrnd)';
@@ -72,31 +84,37 @@ const blueCircleChange = function(e){
 
 
 
-const colorSymbolHover = function(e){
+const colorSymbolHover = function (e) {
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
     thisClassOriginal.querySelector('.colorContainer').style.display = "inline-block";
 }
 
 
 
-const colorSymbolOut = function(e){
+const colorSymbolOut = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
-    if(document.querySelectorAll('.colorContainer')){
-    thisClassOriginal.querySelector('.colorContainer').style.display = "none";
-}
+    if (document.querySelectorAll('.colorContainer')) {
+        thisClassOriginal.querySelector('.colorContainer').style.display = "none";
+    }
 }
 
-const showDelete = function(e){
+const colorSymbolAndDeleteOut = function (e) {
+    let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
+    thisClassOriginal.querySelector('.colorContainer').style.display = "none";
+    thisClassOriginal.querySelector('.closeContainer').style.display = "none";
+}
+
+const showDelete = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
     thisClassOriginal.querySelector('.closeContainer').style.display = "inline-block";
 }
 
-const dontShowDelete = function(e){
+const dontShowDelete = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
     thisClassOriginal.querySelector('.closeContainer').style.display = "none";
 }
 
-const createNote = function(note) {
+const createNote = function (note) {
     if (note['title'] != '') {
 
         notes.push(note);
@@ -119,7 +137,7 @@ const createNote = function(note) {
         newDiv.setAttribute('data-index', notes.length - 1);
         newDiv.addEventListener('click', focusIn)
         newNotePad.appendChild(newDiv);
-      
+
         let newH2 = document.createElement('input')
         newH2.setAttribute('type', 'text')
         newH2.setAttribute('class', 'noteH2')
@@ -129,10 +147,10 @@ const createNote = function(note) {
         newH2.addEventListener('click', focusIn)
         newH2.addEventListener('keydown', updateTitleValue);
         newDiv.appendChild(newH2);
-        
+
         let newP = document.createElement('p');
         newP.setAttribute('class', 'noteP');
-        newP.innerText= note['copy'];
+        newP.innerText = note['copy'];
         // newP.setAttribute('autocomplete', 'off')
         newP.setAttribute('contenteditable', 'true');
         newP.setAttribute('role', 'textbox')
@@ -141,15 +159,15 @@ const createNote = function(note) {
         newP.addEventListener('keydown', updateCopyValue);
         newP.addEventListener("paste", sanitizeText);
         newNotePad.appendChild(newP);
-        
+
         itemDiv.appendChild(newNotePad);
 
 
-     
+
 
         let colorContainer = document.createElement('div')
         colorContainer.setAttribute('class', 'colorContainer');
-        
+
 
         let originalCircle = document.createElement('span')
         originalCircle.setAttribute('class', 'original')
@@ -202,7 +220,7 @@ const createNote = function(note) {
         closeText.innerText = 'Delete';
 
         itemDiv.appendChild(closeText);
-        
+
         optionsContainer.appendChild(close)
 
         itemDiv.appendChild(optionsContainer)
@@ -210,29 +228,29 @@ const createNote = function(note) {
         let theFirstChild = container.firstChild;
         container.insertBefore(itemDiv, theFirstChild);
 
-        if(note['color'] === 'standard'){
-            let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+        if (note['color'] === 'standard') {
+            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
             thisClassOriginal.style.color = 'white';
             thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
             thisClassOriginal.querySelector('.noteH2').style.color = "white";
 
-        }else if(note['color'] === 'red'){
-                let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
-                thisClassOriginal.style.color = 'var(--bkgrnd)';
-                thisClassOriginal.style.backgroundColor = 'var(--red)';
-                thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-                thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-                thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
-        }else if(note['color'] === 'green'){
-            let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+        } else if (note['color'] === 'red') {
+            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
+            thisClassOriginal.style.color = 'var(--bkgrnd)';
+            thisClassOriginal.style.backgroundColor = 'var(--red)';
+            thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
+            thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
+            thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+        } else if (note['color'] === 'green') {
+            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
             thisClassOriginal.style.color = 'var(--bkgrnd)';
             thisClassOriginal.style.backgroundColor = 'var(--green)';
             thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
             thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
             thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
 
-        }else if(note['color'] === 'blue'){
-            let thisClassOriginal =  document.querySelector(`.class${notes.length - 1}`)
+        } else if (note['color'] === 'blue') {
+            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
             thisClassOriginal.style.color = 'var(--bkgrnd)';
             thisClassOriginal.style.backgroundColor = 'var(--blue)';
             thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
@@ -248,22 +266,23 @@ const createNote = function(note) {
 
 
 
-const updateTitleValue = function(e){
+const updateTitleValue = function (e) {
 
-    setTimeout(function(){ 
-     notes[e.target.parentElement.dataset.index]['title'] = e.target.value;
-     localStorage.setItem("notesStorage", JSON.stringify(notes));
-     }, 200);
-     
+    setTimeout(function () {
+        notes[e.target.parentElement.dataset.index]['title'] = e.target.value;
+        localStorage.setItem("notesStorage", JSON.stringify(notes));
+    }, 200);
+
 }
 
-const updateCopyValue = function(e){
+const updateCopyValue = function (e) {
 
-    setTimeout(function(){ 
+    setTimeout(function () {
         notes[e.target.parentElement.dataset.index]['copy'] = e.target.innerText;
         resizeAllGridItems()
         localStorage.setItem("notesStorage", JSON.stringify(notes));
-        }, 200);
+        checkForLinks()
+    }, 200);
 }
 
 const getInputValues = function (event) {
@@ -285,7 +304,8 @@ const getInputValues = function (event) {
 
 
 
-const focusIn = function(e){
+const focusIn = function (e) {
+
     currentIndex = e.target.dataset.index;
     console.log(currentIndex)
     const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
@@ -296,19 +316,19 @@ const focusIn = function(e){
     thisClass.querySelector('.close-this').addEventListener('mouseover', colorSymbolOut);
     cover.style.display = "block"
     cover.style.zIndex = "3"
-    cover.addEventListener('mouseover', colorSymbolOut);
-    setTimeout(function(){ 
+    cover.addEventListener('mouseover', colorSymbolAndDeleteOut);
+    setTimeout(function () {
         cover.style.opacity = "1"
-        }, 1);
+    }, 1);
 
-    thisClass.classList.add("centered"); 
+    thisClass.classList.add("centered");
     // document.querySelector('.item').style.filter = "blur(8px)"
-   
+
 }
 
 
 
-const focusOut = function(e){
+const focusOut = function (e) {
     focusIndex = document.querySelector(`.class${currentIndex}`)
     focusIndex.querySelector('.noteP').innerText = notes[currentIndex]['copy']
     focusIndex.querySelector('.noteP').style.overflow = 'hidden'
@@ -316,10 +336,10 @@ const focusOut = function(e){
     focusIndex.querySelector('.closeContainer').style.display = "none";
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
-    setTimeout(function(){ 
+    setTimeout(function () {
         cover.style.display = "none"
-        }, 200);
-  
+    }, 200);
+
     const center = document.querySelector('.centered')
     center.classList.remove("centered");
 
@@ -329,23 +349,23 @@ const focusOut = function(e){
 cover.addEventListener('click', focusOut)
 
 
-function resizeGridItem(item){
+function resizeGridItem(item) {
     grid = document.querySelector(".wrapper");
     rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
     rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
-    rowSpan = Math.ceil((item.querySelector('.user-note-pad').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
-      item.style.gridRowEnd = "span "+rowSpan;
-  }
-  
-  function resizeAllGridItems(){
-    allItems = document.getElementsByClassName("item");
-    for(x=0;x<allItems.length;x++){
-      resizeGridItem(allItems[x]);
-    }
-  }
-  
+    rowSpan = Math.ceil((item.querySelector('.user-note-pad').getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+    item.style.gridRowEnd = "span " + rowSpan;
+}
 
-const sanitizeText = function(e) {
+function resizeAllGridItems() {
+    allItems = document.getElementsByClassName("item");
+    for (x = 0; x < allItems.length; x++) {
+        resizeGridItem(allItems[x]);
+    }
+}
+
+
+const sanitizeText = function (e) {
     // cancel paste
     e.preventDefault();
 
@@ -354,7 +374,10 @@ const sanitizeText = function(e) {
 
     // insert text manually
     document.execCommand("insertHTML", false, text);
-    new KeyboardEvent('keydown',{'keyCode':32,'which':32})
+    new KeyboardEvent('keydown', {
+        'keyCode': 32,
+        'which': 32
+    })
 }
 
 
@@ -364,28 +387,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let newStore = [];
     const storedNotes = JSON.parse(localStorage.getItem("notesStorage"));
-    for(let note in storedNotes){
+    for (let note in storedNotes) {
 
-     if(storedNotes[note]['deleted'] === false){
+        if (storedNotes[note]['deleted'] === false) {
             newStore.push(storedNotes[note])
         }
-        
-     }
+
+    }
 
     for (let singleNote in newStore) {
         createNote(newStore[singleNote])
     }
 
- 
+
 
 
     document.querySelector('.btn').addEventListener('click', getInputValues);
     document.querySelector('.title').focus();
 
- 
-      
-      window.onload = resizeAllGridItems();
-      window.addEventListener("resize", resizeAllGridItems);
+
+
+    window.onload = resizeAllGridItems();
+    window.addEventListener("resize", resizeAllGridItems);
 
 
 });

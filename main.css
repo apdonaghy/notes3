@@ -18,7 +18,7 @@
 }
 
 ::selection{
-    background: var(--blue);
+    background: #3a89e4;
     color: var(--bkgrnd)
 }
 
