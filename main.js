@@ -1,5 +1,6 @@
 let notes = [];
 let currentIndex;
+let hyperlinkLength = [];
 const container = document.querySelector('.wrapper');
 const cover = document.querySelector('#cover')
 
@@ -8,11 +9,18 @@ const checkForLinks = function() {
     var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
     var regex = new RegExp(expression);
     var t = document.querySelector(`.class${currentIndex}`).querySelector('.noteP').innerText
-    console.log(t)
+    // console.log(t)
     if (t.match(regex)) {
         console.log(t.match(regex)[0])
+        // let hyperlink = document.createElement('a');
+        // hyperlinkLength.push(t.match(regex)[0])
+        // hyperlink.setAttribute('class', `classLink${hyperlinkLength.length - 1}`)
+        // hyperlink.href =  t.match(regex)[0]
+        // hyperlink.innerText = `${t.match(regex)[0]}`;
+        // hyperlink.style.display = "block";
+        // document.querySelector(`.class${currentIndex}`).querySelector('.user-note-pad').appendChild(hyperlink);
     } else {
-        console.log('no link here')
+        console.log('no link here') 
     }
 }
 
