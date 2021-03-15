@@ -1,3 +1,7 @@
+
+
+
+
 * {
     margin: 0;
     padding: 0;
@@ -15,6 +19,8 @@
     --blue:#51a3ff;
     --green:#7fce6d;
     --red:#f67f80;
+    --scrollbarBG: transparent;
+    --thumbBG: rgba(255,255,255, 0.5);
 }
 
 ::selection{
@@ -25,6 +31,27 @@
 ::placeholder {
     color:#8b8ba0;
 }
+
+
+*::-webkit-scrollbar {
+    width: 8px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+  }
+  *::-webkit-scrollbar-track {
+    background: var(--scrollbarBG);
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--thumbBG) ;
+    border-radius: 6px;
+    border: 3px solid var(--scrollbarBG);
+  }
+  
+
+
+
 
 body {
     background-color: var(--bkgrnd);
@@ -66,15 +93,15 @@ h1 {
 }
 
 .user-note-pad {
-    margin-bottom: 30px;
-    max-height: 90vh;
-    overflow: scroll;
+    margin-bottom: 31px;
+    /* max-height: 90vh; */
+    /* overflow: scroll; */
 }
 
 form {
    
     margin-bottom: 60px;
-    border: 1px solid #4f4f65;
+    border: 1px solid rgba(255,255,255, 0.4);
     border-radius: 7px;
     width: 50%;
     background-color: var(--bkgrnd);
@@ -139,6 +166,31 @@ textarea {
    
 }
 
+.hyperlink{
+    text-decoration: none;
+    color:inherit;
+    font-size:.8em;
+    overflow: hidden;
+    margin:0px 20px 3px 20px;
+    border-radius: 3px;
+    background-color:rgba(255,255,255, 0.2);
+    padding:5px;
+    display: flex;
+
+    /* color:orange */
+}
+
+.linksDiv{
+    max-height:15vh;
+    overflow: auto;
+    /* background-color: var(--bkgrnd); */
+    /* box-shadow: 0px -20px 5px var(--bkgrnd); */
+    position: relative;
+    z-index: 0;
+}
+.fa-external-link-alt{
+    display:inline-block;
+}
 
 i {
     font-size: 3em;
@@ -156,10 +208,27 @@ i {
     z-index: 0;
     display: block;
     line-height: 1.35em;
-    max-height: 70vh;
+    max-height: 65vh;
     overflow:hidden;
-    /* margin-bottom:30px; */
+    background-image: ;
+    /* margin-bottom:5px; */
 }
+
+/* .noteP:after {
+    position: absolute;
+    bottom: 0; 
+    left:0; 
+    height: 10%;
+    width: 100%;
+    content: "";
+    background: linear-gradient(to top,
+       rgba(26,26,33, 1) 10%,
+       rgba(26,26,33, 0) 90%
+    );
+    pointer-events: none; /* so the text is still selectable */
+  } */
+
+
 
 input,
 textarea {
@@ -286,8 +355,8 @@ textarea {
       top: 0;
       left: 0;
       z-index:-1;
-      filter: blur(8px);
-      -webkit-filter: blur(8px);
+      /* filter: blur(8px);
+      -webkit-filter: blur(8px); */
   }
 
   .centered {

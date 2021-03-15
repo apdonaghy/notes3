@@ -1,33 +1,48 @@
 let notes = [];
 let currentIndex;
-let hyperlinkLength = [];
+// let hyperlinkLength = [];
 const container = document.querySelector('.wrapper');
 const cover = document.querySelector('#cover')
 
 
-// const checkForLinks = function () {
-//     var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
-//     var regex = new RegExp(expression);
-//     var t = document.querySelector(`.class${currentIndex}`).querySelector('.noteP').innerText
-   
-//     if (t.match(regex)) {
+const checkForLinks = function (textSource, dataIndex) {
+    var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+    var regex = new RegExp(expression);
+    var t = textSource
 
-//         for (let link in t.match(regex)){
-//             notes[currentIndex]['links'].push(t.match(regex)[link]);
-//             console.log(notes[currentIndex]['links'])
-//             let hyperlink = document.createElement('a');
-//             hyperlinkLength.push(t.match(regex)[link])
-//             hyperlink.setAttribute('class', `classLink${hyperlinkLength.length - 1}`)
-//             hyperlink.href = t.match(regex)[link]
-//             hyperlink.innerText = `${t.match(regex)[link]}`;
-//             hyperlink.style.display = "block";
-//             hyperlink.setAttribute('target', "_blank")
-//             document.querySelector(`.class${currentIndex}`).querySelector('.user-note-pad').appendChild(hyperlink);
-//             }
-//         } else {
-//             console.log('no link here')
-//     }
-// }
+    if (t.match(regex)) {
+
+        for (let link in t.match(regex)){
+            if(notes[dataIndex]['fromStorage'] === true){
+                notes[dataIndex]['links'].push(t.match(regex)[link]);
+                let hyperlink = document.createElement('a')
+                hyperlink.setAttribute('class', 'hyperlink')
+                hyperlink.setAttribute('data-index', dataIndex)
+                hyperlink.href = t.match(regex)[link]
+                hyperlink.innerHTML = `${t.match(regex)[link]}<i class="fas fa-external-link-alt"></i>`;
+                hyperlink.style.display = "block";
+                hyperlink.setAttribute('target', "_blank")
+                document.querySelector(`.class${dataIndex}`).querySelector('.linksDiv').appendChild(hyperlink);
+            } else {
+            if (notes[dataIndex]['links'].includes(t.match(regex)[link]) === false) {
+                notes[dataIndex]['links'].push(t.match(regex)[link]);
+                let hyperlink = document.createElement('a')
+                hyperlink.setAttribute('class', 'hyperlink')
+                hyperlink.setAttribute('data-index', dataIndex)
+                hyperlink.href = t.match(regex)[link]
+                hyperlink.innerHTML = `<i class="fas fa-external-link-alt"></i>${t.match(regex)[link]}`;
+                hyperlink.style.display = "block";
+                hyperlink.setAttribute('target', "_blank")
+                document.querySelector(`.class${dataIndex}`).querySelector('.linksDiv').appendChild(hyperlink);
+                }
+             }
+        }
+        notes[dataIndex]['fromStorage'] = false;
+    } else {
+        console.log('no link here')
+    }
+    resizeAllGridItems()
+}
 
 const closeFunc = function (e) {
     let noteIndex = e.target.dataset.index;
@@ -142,7 +157,7 @@ const createNote = function (note) {
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
         newNotePad.setAttribute('data-index', notes.length - 1);
-        newNotePad.addEventListener('click', focusIn);
+        // newNotePad.addEventListener('click', focusIn);
 
 
         let newDiv = document.createElement('div');
@@ -164,14 +179,17 @@ const createNote = function (note) {
         let newP = document.createElement('p');
         newP.setAttribute('class', 'noteP');
         newP.innerText = note['copy'];
-        // newP.setAttribute('autocomplete', 'off')
         newP.setAttribute('contenteditable', 'true');
         newP.setAttribute('role', 'textbox')
         newP.setAttribute('data-index', notes.length - 1);
-        newP.addEventListener('click', focusIn)
         newP.addEventListener('keydown', updateCopyValue);
         newP.addEventListener("paste", sanitizeText);
         newNotePad.appendChild(newP);
+
+
+        let linksDiv = document.createElement('div')
+        linksDiv.setAttribute('class', 'linksDiv')
+        newNotePad.appendChild(linksDiv)
 
         itemDiv.appendChild(newNotePad);
 
@@ -274,7 +292,11 @@ const createNote = function (note) {
 
         closeText.addEventListener("click", closeFunc);
         document.querySelector('.title').focus();
+        document.querySelector('.noteP').addEventListener('click', focusIn)
+
     }
+
+    checkForLinks(note['copy'], notes.length - 1)
 }
 
 
@@ -294,7 +316,7 @@ const updateCopyValue = function (e) {
         notes[e.target.parentElement.dataset.index]['copy'] = e.target.innerText;
         resizeAllGridItems()
         localStorage.setItem("notesStorage", JSON.stringify(notes));
-        checkForLinks()
+        checkForLinks(notes[e.target.parentElement.dataset.index]['copy'], currentIndex)
     }, 200);
 }
 
@@ -307,7 +329,8 @@ const getInputValues = function (event) {
         copy: document.querySelector('.body-copy').innerText,
         deleted: false,
         color: "standard",
-        links: []
+        links: [],
+        fromStorage: false
     }
 
     document.querySelector('form').reset();
@@ -319,11 +342,11 @@ const getInputValues = function (event) {
 
 
 const focusIn = function (e) {
-
     currentIndex = e.target.dataset.index;
-    console.log(currentIndex)
+    console.log(notes)
     const thisClass = document.querySelector(`.class${e.target.dataset.index}`)
-    thisClass.querySelector('.noteP').style.overflow = 'scroll';
+    thisClass.querySelector('.noteP').removeEventListener('click', focusIn);
+    thisClass.querySelector('.noteP').style.overflow = 'auto';
     thisClass.querySelector('.optionsContainer').style.display = "block";
     thisClass.querySelector('.user-note-pad').addEventListener('mouseover', colorSymbolOut);
     thisClass.querySelector('.fa-palette').addEventListener('mouseover', dontShowDelete);
@@ -336,7 +359,7 @@ const focusIn = function (e) {
     }, 1);
 
     thisClass.classList.add("centered");
-    // document.querySelector('.item').style.filter = "blur(8px)"
+    document.querySelector('body').style.overflow = "hidden"
 
 }
 
@@ -344,10 +367,12 @@ const focusIn = function (e) {
 
 const focusOut = function (e) {
     focusIndex = document.querySelector(`.class${currentIndex}`)
+    focusIndex.querySelector('.noteP').addEventListener('click', focusIn);
     focusIndex.querySelector('.noteP').innerText = notes[currentIndex]['copy']
     focusIndex.querySelector('.noteP').style.overflow = 'hidden'
     focusIndex.querySelector('.optionsContainer').style.display = "none";
     focusIndex.querySelector('.closeContainer').style.display = "none";
+    document.querySelector('body').style.overflow = "scroll"
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
     setTimeout(function () {
@@ -404,6 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let note in storedNotes) {
 
         if (storedNotes[note]['deleted'] === false) {
+            storedNotes[note]['fromStorage'] = true;
             newStore.push(storedNotes[note])
         }
 
