@@ -41,7 +41,6 @@ const checkForLinks = function (textSource, dataIndex) {
     } else {
         console.log('no link here')
     }
-    resizeAllGridItems()
 }
 
 const closeFunc = function (e) {
@@ -297,6 +296,7 @@ const createNote = function (note) {
     }
 
     checkForLinks(note['copy'], notes.length - 1)
+    resizeAllGridItems()
 }
 
 
@@ -372,7 +372,7 @@ const focusOut = function (e) {
     focusIndex.querySelector('.noteP').style.overflow = 'hidden'
     focusIndex.querySelector('.optionsContainer').style.display = "none";
     focusIndex.querySelector('.closeContainer').style.display = "none";
-    document.querySelector('body').style.overflow = "scroll"
+    document.querySelector('body').style.overflow = "auto"
     cover.style.zIndex = "-5"
     cover.style.opacity = "0"
     setTimeout(function () {

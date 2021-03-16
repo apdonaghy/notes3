@@ -17,7 +17,7 @@
 :root{
     --bkgrnd: #1a1a21;
     --blue:#51a3ff;
-    --green:#7fce6d;
+    --green:#86ecb7;
     --red:#f67f80;
     --scrollbarBG: transparent;
     --thumbBG: rgba(255,255,255, 0.5);
@@ -127,10 +127,6 @@ textarea {
         flex-wrap:wrap;
 
     }
-    .user-note-pad {
-        /* width: 48.2%; */
-       
-    }
     form{
         width:75%
     }
@@ -138,9 +134,7 @@ textarea {
 
 
 @media only screen and (max-width: 700px) {
-    .user-note-pad {
-        /* width: 100%; */
-    }
+  
     form{
         width:100%
     }
@@ -183,11 +177,16 @@ textarea {
 .linksDiv{
     max-height:15vh;
     overflow: auto;
-    /* background-color: var(--bkgrnd); */
-    /* box-shadow: 0px -20px 5px var(--bkgrnd); */
-    position: relative;
-    z-index: 0;
+    
 }
+
+.linksDiv:after{
+
+    position: relative;
+    z-index: 1;
+    box-shadow: 0px -5px 10px black;
+}
+
 .fa-external-link-alt{
     display:inline-block;
 }
@@ -210,30 +209,7 @@ i {
     line-height: 1.35em;
     max-height: 65vh;
     overflow:hidden;
-    background-image: ;
     /* margin-bottom:5px; */
-}
-
-/* .noteP:after {
-    position: absolute;
-    bottom: 0; 
-    left:0; 
-    height: 10%;
-    width: 100%;
-    content: "";
-    background: linear-gradient(to top,
-       rgba(26,26,33, 1) 10%,
-       rgba(26,26,33, 0) 90%
-    );
-    pointer-events: none; /* so the text is still selectable */
-  } */
-
-
-
-input,
-textarea {
-    /* caret-color: var(--blue); */
-
 }
 
 button{
