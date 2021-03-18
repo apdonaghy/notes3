@@ -18,7 +18,7 @@
     --bkgrnd: #1a1a21;
     --blue:#51a3ff;
     --green:#86ecb7;
-    --red:#f67f80;
+    --red:#ff8c8d;
     --scrollbarBG: transparent;
     --thumbBG: rgba(255,255,255, 0.5);
 }
@@ -174,6 +174,10 @@ textarea {
     /* color:orange */
 }
 
+.hyperlink i{
+    font-size: .6em;
+}
+
 .linksDiv{
     max-height:15vh;
     overflow: auto;
@@ -196,7 +200,7 @@ i {
 }
 
 .noteP {
-    font-size: 1em;
+    font-size: .9em;
     font-weight: 500;
     padding: 20px;
     background-color:transparent;
@@ -465,3 +469,117 @@ textarea {
     transition:.2s;
     border: 1px solid white;
 }
+
+
+
+
+  
+  #todo{
+    max-width:16em;
+  }
+  
+  .listItem{
+    display:flex;
+    position:relative;
+  } 
+  
+  
+  #listName{
+    outline:none;
+    border:none;
+    border-bottom:2px solid;
+  }
+  
+  .check{
+   margin-right:5px;
+    background:none;
+  }
+  
+  .listDescription{
+    display:inline;
+    outline:none;
+  /*   width:1%; */
+    border:none;
+    border-bottom: 2px solid;
+    margin-left:15px;
+    
+  }
+  
+  .listDescription[contenteditable]:empty::before {
+      content: "Note";
+      color: #8b8ba0;;
+    }
+  
+  .remove{
+    transition:.2s;
+    font-size:.75em;
+    opacity:0.5;
+    cursor:pointer;
+    margin-left: auto;
+  }
+  
+  .remove:hover{
+    transition:.2s;
+    opacity:1.0;
+  }
+  
+  
+  .checkContainer {
+    display: block;
+    position: relative;
+    margin-right: 5px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  
+  .checkContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 16px;
+    width: 16px;
+    border:2px solid;
+  }
+  
+  
+  .checkContainer:hover input ~ .checkmark {
+  transition:.2s;
+    opacity:.8;
+  }
+  
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  
+  .checkContainer input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  .checkContainer .checkmark:after {
+    left: 3px;
+    top: 0x;
+    width: 3px;
+    height: 8px;
+    border: solid;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }

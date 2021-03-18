@@ -181,7 +181,7 @@ const createNote = function (note) {
         newP.setAttribute('contenteditable', 'true');
         newP.setAttribute('role', 'textbox')
         newP.setAttribute('data-index', notes.length - 1);
-        newP.addEventListener('keydown', updateCopyValue);
+        newP.addEventListener('keyup', updateCopyValue);
         newP.addEventListener("paste", sanitizeText);
         newNotePad.appendChild(newP);
 
@@ -452,3 +452,96 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
+
+
+
+
+// todo list code
+
+
+
+// let listItems = [];
+
+// const removeLi = function(e){
+//   e.target.parentElement.remove()
+//   listItems[e.target.parentElement.dataset.index]['deleted'] = true;
+// }
+
+// const updateLi = function(e){
+//   listItems[e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
+//   console.log(listItems)
+// }
+
+// const isChecked = function(e){
+//   if(e.target.checked === true){
+//    listItems[e.target.parentElement.dataset.index]['checked'] = true; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
+//   }else{
+//     listItems[e.target.parentElement.dataset.index]['checked'] = false; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
+//   }
+// }
+
+
+// const createListDom = document.getElementById('createListItem')
+
+// const createListItem = function(event){
+//    event.preventDefault();
+
+//   if(document.querySelector('#listName').value !== ''){
+ 
+//   const list = document.getElementById("list")
+//   const listItem = document.createElement('div');
+//   listItem.setAttribute('class','listItem');
+    
+//   const checkContainer = document.createElement('label')  
+//   checkContainer.setAttribute('class', 'checkContainer')
+    
+//   const checkBox = document.createElement('input');
+//   checkBox.setAttribute('class', 'check');
+//   checkBox.setAttribute('type','checkbox');
+//   checkBox.addEventListener('click', isChecked);
+//   checkContainer.appendChild(checkBox);
+    
+//   const check = document.createElement('span')
+//   check.setAttribute('class', 'checkmark');
+//   checkContainer.appendChild(check);
+    
+//   listItem.appendChild(checkContainer)  
+  
+//   const listDescription = document.createElement('p');
+//   listDescription.innerText = document.querySelector('#listName').value;
+//   listDescription.setAttribute('class', 'listDescription');
+//   listDescription.setAttribute('contenteditable', 'true');
+//   listDescription.setAttribute('role', 'textbox')
+//   listDescription.addEventListener('keyup', updateLi)
+//   listItem.appendChild(listDescription);
+  
+//   const remove = document.createElement('span');
+//   remove.setAttribute('class', 'remove')
+//   remove.innerText = 'x';
+//   remove.addEventListener('click', removeLi)
+//   listItem.appendChild(remove);
+  
+//   let theFirstChild = list.firstChild;
+//   list.insertBefore(listItem, theFirstChild);
+  
+//   let currentListItem = {
+//      label: document.querySelector('#listName').value,
+//      checked: false,
+//      deleted: false
+//   }
+  
+//   listItems.push(currentListItem);
+    
+//    checkContainer.setAttribute('data-index', listItems.length - 1);
+//    listItem.setAttribute('data-index', listItems.length - 1);
+  
+//   document.querySelector('#listName').value = '';
+//   document.querySelector('#listName').focus();
+//   // console.log(listItems);
+//     }
+// }
+
+
+// createListDom.addEventListener('click', createListItem);
+
+
