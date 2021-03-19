@@ -98,7 +98,7 @@ h1 {
     /* overflow: scroll; */
 }
 
-form {
+#initial {
    
     margin-bottom: 60px;
     border: 1px solid rgba(255,255,255, 0.4);
@@ -109,7 +109,7 @@ form {
     padding:20px;
     caret-color: var(--blue); 
 }
-form input{
+#initial input{
     width:100%;
     overflow: hidden;
 }
@@ -277,7 +277,7 @@ i {
     /* color: white; */
     font-size: 1.25em;
  
-    margin: 5px;
+    margin: 5px 10px 5px 5px;
 }
 
 i:hover, i:focus {
@@ -374,6 +374,19 @@ textarea {
 
   }
 
+  .closeNote{
+    position:absolute;
+    bottom:0;
+    right:0;
+    margin-bottom:5px;
+    margin-right:30px;
+    cursor:pointer;
+  }
+
+  .closeNote:hover{
+      opacity:0.6;
+  }
+
   .colorContainer{
       background-color: var(--bkgrnd);
       padding:7px 7px 4px 7px;
@@ -394,13 +407,31 @@ textarea {
     position:absolute;
     bottom:0;
     margin-bottom:30px;
-    margin-left:27px;
+    margin-left:67px;
     color:white;
     cursor:pointer;
     display:none;
 }
 
 .closeContainer:hover{
+    background-color: #30303a;
+}
+
+.createListContainer{
+    background-color: var(--bkgrnd);
+    padding:7px 7px 4px 7px;
+    border-radius: 5px;
+    border: 1px solid rgba(255,255,255, 0.4);
+    position:absolute;
+    bottom:0;
+    margin-bottom:30px;
+    margin-left:22px;
+    color:white;
+    cursor:pointer;
+    display:none;
+}
+
+.createListContainer:hover{
     background-color: #30303a;
 }
 

@@ -61,6 +61,8 @@ const closeFunc = function (e) {
 }
 
 
+
+
 const original = function (e) {
     notes[e.target.dataset.index]['color'] = "standard";
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
@@ -114,6 +116,7 @@ const blueCircleChange = function (e) {
 const colorSymbolHover = function (e) {
     let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
     thisClassOriginal.querySelector('.colorContainer').style.display = "inline-block";
+    thisClassOriginal.querySelector('.createListContainer').style.display = "none";
 }
 
 
@@ -129,16 +132,31 @@ const colorSymbolAndDeleteOut = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
     thisClassOriginal.querySelector('.colorContainer').style.display = "none";
     thisClassOriginal.querySelector('.closeContainer').style.display = "none";
+    thisClassOriginal.querySelector('.createListContainer').style.display = "none";
+
 }
 
 const showDelete = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
     thisClassOriginal.querySelector('.closeContainer').style.display = "inline-block";
+    thisClassOriginal.querySelector('.createListContainer').style.display = "none";
 }
 
 const dontShowDelete = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
     thisClassOriginal.querySelector('.closeContainer').style.display = "none";
+}
+
+const showMakeList = function(e){
+    let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
+    thisClassOriginal.querySelector('.createListContainer').style.display = "inline-block";
+    thisClassOriginal.querySelector('.closeContainer').style.display = "none";
+    thisClassOriginal.querySelector('.colorContainer').style.display = "none";
+}
+
+const dontShowListText = function (e) {
+    let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
+    thisClassOriginal.querySelector('.createListContainer').style.display = "none";
 }
 
 const createNote = function (note) {
@@ -185,15 +203,11 @@ const createNote = function (note) {
         newP.addEventListener("paste", sanitizeText);
         newNotePad.appendChild(newP);
 
-
         let linksDiv = document.createElement('div')
         linksDiv.setAttribute('class', 'linksDiv')
         newNotePad.appendChild(linksDiv)
 
         itemDiv.appendChild(newNotePad);
-
-
-
 
         let colorContainer = document.createElement('div')
         colorContainer.setAttribute('class', 'colorContainer');
@@ -236,6 +250,21 @@ const createNote = function (note) {
         colorSymbol.addEventListener('focus', colorSymbolHover)
         optionsContainer.appendChild(colorSymbol)
 
+        let makeList = document.createElement('span')
+        makeList.setAttribute('data-index', notes.length - 1);
+        makeList.setAttribute('class', 'makeList')
+        makeList.innerHTML = `<i class="fas fa-list-ul"></i>`;
+        makeList.addEventListener('mouseover', showMakeList)
+        optionsContainer.appendChild(makeList)
+
+        let makeListText = document.createElement('p')
+        makeListText.setAttribute('class', 'createListContainer')
+        makeListText.setAttribute('data-index', notes.length - 1);
+        makeListText.addEventListener('mouseout', dontShowListText)
+        makeListText.innerText = 'Create List';
+
+        itemDiv.appendChild(makeListText);
+
         let close = document.createElement('span')
         close.setAttribute('data-index', notes.length - 1);
         close.setAttribute('class', 'close-this')
@@ -253,6 +282,12 @@ const createNote = function (note) {
 
         optionsContainer.appendChild(close)
 
+        let closeNote = document.createElement('p')
+        closeNote.setAttribute('class', 'closeNote')
+        closeNote.addEventListener('click', focusOut)
+        closeNote.addEventListener('keydown', focusOut)
+        closeNote.innerText = 'Close';
+        optionsContainer.appendChild(closeNote)
         itemDiv.appendChild(optionsContainer)
 
         let theFirstChild = container.firstChild;
@@ -323,7 +358,6 @@ const updateCopyValue = function (e) {
 const getInputValues = function (event) {
     event.preventDefault();
 
-
     let singleNote = {
         title: document.querySelector('.title').value,
         copy: document.querySelector('.body-copy').innerText,
@@ -351,6 +385,7 @@ const focusIn = function (e) {
     thisClass.querySelector('.user-note-pad').addEventListener('mouseover', colorSymbolOut);
     thisClass.querySelector('.fa-palette').addEventListener('mouseover', dontShowDelete);
     thisClass.querySelector('.close-this').addEventListener('mouseover', colorSymbolOut);
+   
     cover.style.display = "block"
     cover.style.zIndex = "3"
     cover.addEventListener('mouseover', colorSymbolAndDeleteOut);
