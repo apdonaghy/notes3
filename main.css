@@ -519,6 +519,7 @@ textarea {
     outline:none;
     border:none;
     border-bottom:2px solid;
+    background:transparent;
   }
   
   .check{

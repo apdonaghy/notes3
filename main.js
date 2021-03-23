@@ -1,9 +1,26 @@
 let notes = [];
 let currentIndex;
-// let hyperlinkLength = [];
 const container = document.querySelector('.wrapper');
 const cover = document.querySelector('#cover')
+const black = 'var(--bkgrnd)'
+const white = 'white'
+const red = 'var(--red)'
+const green = 'var(--green)'
+const blue = 'var(--blue)'
+const lightUnderline = '0px 2px 5px rgba(0, 0, 0, .1)'
+const lightOptionsBlur = '0px 2px 5px rgba(0, 0, 0, .1)'
+const darkUnderline = '0px 2px 5px rgba(0, 0, 0, .6)'
+const darkOptionsBlur = '0px 2px 5px rgba(0, 0, 0, 1)'
 
+
+function createColor(textColorVar, backgroundColorVar, underlineBlur, optionsBlur, classAccessInside){
+    let thisClassOriginal = document.querySelector(`.class${classAccessInside}`)
+    thisClassOriginal.style.color = textColorVar;
+    thisClassOriginal.style.backgroundColor = backgroundColorVar;
+    thisClassOriginal.querySelector('.noteH2').style.color = textColorVar;
+    thisClassOriginal.querySelector('.underline').style.boxShadow = underlineBlur;
+    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = optionsBlur;
+}
 
 const checkForLinks = function (textSource, dataIndex) {
     var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
@@ -11,7 +28,6 @@ const checkForLinks = function (textSource, dataIndex) {
     var t = textSource
 
     if (t.match(regex)) {
-
         for (let link in t.match(regex)){
             if(notes[dataIndex]['fromStorage'] === true){
                 notes[dataIndex]['links'].push(t.match(regex)[link]);
@@ -60,57 +76,32 @@ const closeFunc = function (e) {
     }, 200);
 }
 
-
-
-
 const original = function (e) {
     notes[e.target.dataset.index]['color'] = "standard";
-    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
-    thisClassOriginal.style.color = 'white';
-    thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
-    thisClassOriginal.querySelector('.noteH2').style.color = "white";
+    createColor(white, black, darkUnderline, darkOptionsBlur, e.target.dataset.index)
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 
 }
-
 
 const redCircleChange = function (e) {
     notes[e.target.dataset.index]['color'] = "red";
-    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
-    thisClassOriginal.style.color = 'var(--bkgrnd)';
-    thisClassOriginal.style.backgroundColor = 'var(--red)';
-    thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-    thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+    createColor(black, red, lightUnderline, lightOptionsBlur, e.target.dataset.index)
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 
 }
-
 
 const greenCircleChange = function (e) {
     notes[e.target.dataset.index]['color'] = "green";
-    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
-    thisClassOriginal.style.color = 'var(--bkgrnd)';
-    thisClassOriginal.style.backgroundColor = 'var(--green)';
-    thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-    thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+    createColor(black, green, lightUnderline, lightOptionsBlur, e.target.dataset.index)
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 
 }
-
 
 const blueCircleChange = function (e) {
     notes[e.target.dataset.index]['color'] = "blue";
-    let thisClassOriginal = document.querySelector(`.class${e.target.dataset.index}`)
-    thisClassOriginal.style.color = 'var(--bkgrnd)';
-    thisClassOriginal.style.backgroundColor = 'var(--blue)';
-    thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-    thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-    thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+    createColor(black, blue, lightUnderline, lightOptionsBlur, e.target.dataset.index)
     localStorage.setItem("notesStorage", JSON.stringify(notes));
 }
-
 
 
 const colorSymbolHover = function (e) {
@@ -118,7 +109,6 @@ const colorSymbolHover = function (e) {
     thisClassOriginal.querySelector('.colorContainer').style.display = "inline-block";
     thisClassOriginal.querySelector('.createListContainer').style.display = "none";
 }
-
 
 
 const colorSymbolOut = function (e) {
@@ -170,12 +160,9 @@ const createNote = function (note) {
         itemDiv.setAttribute('data-index', notes.length - 1);
         itemDiv.setAttribute('class', `item   class${notes.length - 1}`)
 
-
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
         newNotePad.setAttribute('data-index', notes.length - 1);
-        // newNotePad.addEventListener('click', focusIn);
-
 
         let newDiv = document.createElement('div');
         newDiv.setAttribute('class', 'underline');
@@ -212,13 +199,11 @@ const createNote = function (note) {
         let colorContainer = document.createElement('div')
         colorContainer.setAttribute('class', 'colorContainer');
 
-
         let originalCircle = document.createElement('span')
         originalCircle.setAttribute('class', 'original')
         originalCircle.setAttribute('data-index', notes.length - 1);
         originalCircle.addEventListener('click', original)
         colorContainer.appendChild(originalCircle)
-
 
         let blueCircle = document.createElement('span')
         blueCircle.setAttribute('class', 'blueCircle')
@@ -294,33 +279,21 @@ const createNote = function (note) {
         container.insertBefore(itemDiv, theFirstChild);
 
         if (note['color'] === 'standard') {
-            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
-            thisClassOriginal.style.color = 'white';
-            thisClassOriginal.style.backgroundColor = 'var(--bkgrnd)';
-            thisClassOriginal.querySelector('.noteH2').style.color = "white";
+
+            createColor(white, black, darkUnderline, darkOptionsBlur, notes.length - 1)
+
 
         } else if (note['color'] === 'red') {
-            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
-            thisClassOriginal.style.color = 'var(--bkgrnd)';
-            thisClassOriginal.style.backgroundColor = 'var(--red)';
-            thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-            thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-            thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+
+            createColor(black, red, lightUnderline, lightOptionsBlur, notes.length - 1)
+        
         } else if (note['color'] === 'green') {
-            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
-            thisClassOriginal.style.color = 'var(--bkgrnd)';
-            thisClassOriginal.style.backgroundColor = 'var(--green)';
-            thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-            thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-            thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+   
+            createColor(black, green, lightUnderline, lightOptionsBlur, notes.length - 1)
 
         } else if (note['color'] === 'blue') {
-            let thisClassOriginal = document.querySelector(`.class${notes.length - 1}`)
-            thisClassOriginal.style.color = 'var(--bkgrnd)';
-            thisClassOriginal.style.backgroundColor = 'var(--blue)';
-            thisClassOriginal.querySelector('.noteH2').style.color = "var(--bkgrnd)";
-            thisClassOriginal.querySelector('.underline').style.boxShadow = '0px 2px 5px rgba(0, 0, 0, .1)'
-            thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = '2px 0px 2px rgba(0, 0, 0, .2)'
+         
+            createColor(black, blue, lightUnderline, lightOptionsBlur, notes.length - 1)
 
         }
 
@@ -474,13 +447,8 @@ document.addEventListener('DOMContentLoaded', () => {
         createNote(newStore[singleNote])
     }
 
-
-
-
     document.querySelector('.btn').addEventListener('click', getInputValues);
     document.querySelector('.title').focus();
-
-
 
     window.onload = resizeAllGridItems();
     window.addEventListener("resize", resizeAllGridItems);
@@ -495,88 +463,88 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// let listItems = [];
+let listItems = [];
 
-// const removeLi = function(e){
-//   e.target.parentElement.remove()
-//   listItems[e.target.parentElement.dataset.index]['deleted'] = true;
-// }
+const removeLi = function(e){
+  e.target.parentElement.remove()
+  listItems[e.target.parentElement.dataset.index]['deleted'] = true;
+}
 
-// const updateLi = function(e){
-//   listItems[e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
-//   console.log(listItems)
-// }
+const updateLi = function(e){
+  listItems[e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
+  console.log(listItems)
+}
 
-// const isChecked = function(e){
-//   if(e.target.checked === true){
-//    listItems[e.target.parentElement.dataset.index]['checked'] = true; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
-//   }else{
-//     listItems[e.target.parentElement.dataset.index]['checked'] = false; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
-//   }
-// }
+const isChecked = function(e){
+  if(e.target.checked === true){
+   listItems[e.target.parentElement.dataset.index]['checked'] = true; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
+  }else{
+    listItems[e.target.parentElement.dataset.index]['checked'] = false; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
+  }
+}
 
 
-// const createListDom = document.getElementById('createListItem')
+const createListDom = document.getElementById('createListItem')
 
-// const createListItem = function(event){
-//    event.preventDefault();
+const createListItem = function(event){
+   event.preventDefault();
 
-//   if(document.querySelector('#listName').value !== ''){
+  if(document.querySelector('#listName').value !== ''){
  
-//   const list = document.getElementById("list")
-//   const listItem = document.createElement('div');
-//   listItem.setAttribute('class','listItem');
+  const list = document.getElementById("list")
+  const listItem = document.createElement('div');
+  listItem.setAttribute('class','listItem');
     
-//   const checkContainer = document.createElement('label')  
-//   checkContainer.setAttribute('class', 'checkContainer')
+  const checkContainer = document.createElement('label')  
+  checkContainer.setAttribute('class', 'checkContainer')
     
-//   const checkBox = document.createElement('input');
-//   checkBox.setAttribute('class', 'check');
-//   checkBox.setAttribute('type','checkbox');
-//   checkBox.addEventListener('click', isChecked);
-//   checkContainer.appendChild(checkBox);
+  const checkBox = document.createElement('input');
+  checkBox.setAttribute('class', 'check');
+  checkBox.setAttribute('type','checkbox');
+  checkBox.addEventListener('click', isChecked);
+  checkContainer.appendChild(checkBox);
     
-//   const check = document.createElement('span')
-//   check.setAttribute('class', 'checkmark');
-//   checkContainer.appendChild(check);
+  const check = document.createElement('span')
+  check.setAttribute('class', 'checkmark');
+  checkContainer.appendChild(check);
     
-//   listItem.appendChild(checkContainer)  
+  listItem.appendChild(checkContainer)  
   
-//   const listDescription = document.createElement('p');
-//   listDescription.innerText = document.querySelector('#listName').value;
-//   listDescription.setAttribute('class', 'listDescription');
-//   listDescription.setAttribute('contenteditable', 'true');
-//   listDescription.setAttribute('role', 'textbox')
-//   listDescription.addEventListener('keyup', updateLi)
-//   listItem.appendChild(listDescription);
+  const listDescription = document.createElement('p');
+  listDescription.innerText = document.querySelector('#listName').value;
+  listDescription.setAttribute('class', 'listDescription');
+  listDescription.setAttribute('contenteditable', 'true');
+  listDescription.setAttribute('role', 'textbox')
+  listDescription.addEventListener('keyup', updateLi)
+  listItem.appendChild(listDescription);
   
-//   const remove = document.createElement('span');
-//   remove.setAttribute('class', 'remove')
-//   remove.innerText = 'x';
-//   remove.addEventListener('click', removeLi)
-//   listItem.appendChild(remove);
+  const remove = document.createElement('span');
+  remove.setAttribute('class', 'remove')
+  remove.innerText = 'x';
+  remove.addEventListener('click', removeLi)
+  listItem.appendChild(remove);
   
-//   let theFirstChild = list.firstChild;
-//   list.insertBefore(listItem, theFirstChild);
+  let theFirstChild = list.firstChild;
+  list.insertBefore(listItem, theFirstChild);
   
-//   let currentListItem = {
-//      label: document.querySelector('#listName').value,
-//      checked: false,
-//      deleted: false
-//   }
+  let currentListItem = {
+     label: document.querySelector('#listName').value,
+     checked: false,
+     deleted: false
+  }
   
-//   listItems.push(currentListItem);
+  listItems.push(currentListItem);
     
-//    checkContainer.setAttribute('data-index', listItems.length - 1);
-//    listItem.setAttribute('data-index', listItems.length - 1);
+   checkContainer.setAttribute('data-index', listItems.length - 1);
+   listItem.setAttribute('data-index', listItems.length - 1);
   
-//   document.querySelector('#listName').value = '';
-//   document.querySelector('#listName').focus();
-//   // console.log(listItems);
-//     }
-// }
+  document.querySelector('#listName').value = '';
+  document.querySelector('#listName').focus();
+  // console.log(listItems);
+    }
+}
 
 
-// createListDom.addEventListener('click', createListItem);
+createListDom.addEventListener('click', createListItem);
 
 
