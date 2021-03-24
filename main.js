@@ -13,6 +13,114 @@ const darkUnderline = '0px 2px 5px rgba(0, 0, 0, .6)'
 const darkOptionsBlur = '0px 2px 5px rgba(0, 0, 0, 1)'
 
 
+const removeLi = function(e){
+  e.target.parentElement.remove()
+  notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['deleted'] = true;
+}
+
+const updateLi = function(e){
+  notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
+  console.log(notes[currentIndex]['listItems'])
+}
+
+const isChecked = function(e){
+  if(e.target.checked === true){
+    notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['checked'] = true; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
+  }else{
+    notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['checked'] = false; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
+  }
+}
+
+
+const createListItem = function(e){
+    e.preventDefault();
+ 
+   if(document.querySelector(`.class${currentIndex}`).querySelector('.listName').value !== ''){
+  
+   const list = document.querySelector(`.class${currentIndex}`).querySelector(".list")
+   const listItem = document.createElement('div');
+   listItem.setAttribute('class','listItem');
+     
+   const checkContainer = document.createElement('label')  
+   checkContainer.setAttribute('class', 'checkContainer')
+     
+   const checkBox = document.createElement('input');
+   checkBox.setAttribute('class', 'check');
+   checkBox.setAttribute('type','checkbox');
+   checkBox.addEventListener('click', isChecked);
+   checkContainer.appendChild(checkBox);
+     
+   const check = document.createElement('span')
+   check.setAttribute('class', 'checkmark');
+   checkContainer.appendChild(check);
+     
+   listItem.appendChild(checkContainer)  
+   
+   const listDescription = document.createElement('p');
+   listDescription.innerText = document.querySelector(`.class${currentIndex}`).querySelector('.listName').value;
+   listDescription.setAttribute('class', 'listDescription');
+   listDescription.setAttribute('contenteditable', 'true');
+   listDescription.setAttribute('role', 'textbox')
+   listDescription.addEventListener('keyup', updateLi)
+   listItem.appendChild(listDescription);
+   
+   const remove = document.createElement('span');
+   remove.setAttribute('class', 'remove')
+   remove.innerText = 'x';
+   remove.addEventListener('click', removeLi)
+   listItem.appendChild(remove);
+   
+   let theFirstChild = list.firstChild;
+   list.insertBefore(listItem, theFirstChild);
+   
+   let currentListItem = {
+      label: document.querySelector(`.class${currentIndex}`).querySelector('.listName').value,
+      checked: false,
+      deleted: false
+   }
+   
+   notes[currentIndex]['listItems'].push(currentListItem);
+     
+    checkContainer.setAttribute('data-index', notes[currentIndex]['listItems'].length - 1);
+    listItem.setAttribute('data-index', notes[currentIndex]['listItems'].length - 1);
+   
+    document.querySelector(`.class${currentIndex}`).querySelector('.listName').value = '';
+    document.querySelector(`.class${currentIndex}`).querySelector('.listName').focus();
+   // console.log(listItems);
+     }
+ }
+
+ const makeListEvent = function(e){
+
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteP').style.display = 'none';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.linksDiv').style.display = 'none';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.tabsDiv').style.visibility = 'visible';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteTab').style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.listTab').style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.todo').style.display = 'block';
+
+}
+
+const noteTabClick = function(e){
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.todo').style.display = 'none';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteP').style.display = 'block';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.linksDiv').style.display = 'block';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteTab').style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.listTab').style.backgroundColor = 'rgba(0,0,0, 0.1)';
+    resizeAllGridItems()
+}
+
+const listTabClick = function(e){
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.todo').style.display = 'block';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteP').style.display = 'none';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.linksDiv').style.display = 'none';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteTab').style.backgroundColor = 'rgba(0,0,0, 0.1)';
+    document.querySelector(`.class${e.target.dataset.index}`).querySelector('.listTab').style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+    resizeAllGridItems()
+}
+
+
+
 function createColor(textColorVar, backgroundColorVar, underlineBlur, optionsBlur, classAccessInside){
     let thisClassOriginal = document.querySelector(`.class${classAccessInside}`)
     thisClassOriginal.style.color = textColorVar;
@@ -21,6 +129,7 @@ function createColor(textColorVar, backgroundColorVar, underlineBlur, optionsBlu
     thisClassOriginal.querySelector('.underline').style.boxShadow = underlineBlur;
     thisClassOriginal.querySelector('.optionsContainer').style.boxShadow = optionsBlur;
 }
+
 
 const checkForLinks = function (textSource, dataIndex) {
     var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
@@ -158,7 +267,7 @@ const createNote = function (note) {
 
         let itemDiv = document.createElement('div');
         itemDiv.setAttribute('data-index', notes.length - 1);
-        itemDiv.setAttribute('class', `item   class${notes.length - 1}`)
+        itemDiv.setAttribute('class', `item  class${notes.length - 1}`)
 
         let newNotePad = document.createElement('div');
         newNotePad.setAttribute('class', 'user-note-pad')
@@ -179,6 +288,45 @@ const createNote = function (note) {
         newH2.addEventListener('click', focusIn)
         newH2.addEventListener('keydown', updateTitleValue);
         newDiv.appendChild(newH2);
+
+        let tabsDiv = document.createElement('div')
+        tabsDiv.setAttribute('class', 'tabsDiv')
+
+        let noteTab = document.createElement('span')
+        noteTab.setAttribute('class', 'noteTab')
+        noteTab.innerText = 'note'
+        noteTab.addEventListener('click', noteTabClick)
+        noteTab.setAttribute('data-index', notes.length - 1);
+        tabsDiv.appendChild(noteTab)
+
+        let listTab = document.createElement('span')
+        listTab.setAttribute('class', 'listTab')
+        listTab.innerText = 'list';
+        listTab.addEventListener('click', listTabClick)
+        listTab.setAttribute('data-index', notes.length - 1);
+        tabsDiv.appendChild(listTab)
+
+        newNotePad.appendChild(tabsDiv)
+
+        let listForm = document.createElement('form')
+        listForm.setAttribute('class', 'todo')
+
+        let listName = document.createElement('input')
+        listName.setAttribute('type', 'text')
+        listName.setAttribute('class', 'listName')
+        listForm.appendChild(listName)
+
+        let listBtn = document.createElement('button')
+        listBtn.setAttribute('class', 'createListItem')
+        listBtn.addEventListener('click', createListItem)
+        listBtn.innerText = '+';
+        listForm.appendChild(listBtn)
+
+        let listItems = document.createElement('div')
+        listItems.setAttribute('class', 'list')
+        listForm.appendChild(listItems)
+
+        newNotePad.appendChild(listForm)
 
         let newP = document.createElement('p');
         newP.setAttribute('class', 'noteP');
@@ -246,6 +394,7 @@ const createNote = function (note) {
         makeListText.setAttribute('class', 'createListContainer')
         makeListText.setAttribute('data-index', notes.length - 1);
         makeListText.addEventListener('mouseout', dontShowListText)
+        makeListText.addEventListener('click', makeListEvent)
         makeListText.innerText = 'Create List';
 
         itemDiv.appendChild(makeListText);
@@ -337,6 +486,7 @@ const getInputValues = function (event) {
         deleted: false,
         color: "standard",
         links: [],
+        listItems:[],
         fromStorage: false
     }
 
@@ -389,8 +539,9 @@ const focusOut = function (e) {
 
     const center = document.querySelector('.centered')
     center.classList.remove("centered");
-
+    setTimeout(function () {
     resizeAllGridItems()
+    }, 200);
 }
 
 cover.addEventListener('click', focusOut)
@@ -455,96 +606,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
-
-
-
-
-// todo list code
-
-
-
-let listItems = [];
-
-const removeLi = function(e){
-  e.target.parentElement.remove()
-  listItems[e.target.parentElement.dataset.index]['deleted'] = true;
-}
-
-const updateLi = function(e){
-  listItems[e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
-  console.log(listItems)
-}
-
-const isChecked = function(e){
-  if(e.target.checked === true){
-   listItems[e.target.parentElement.dataset.index]['checked'] = true; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
-  }else{
-    listItems[e.target.parentElement.dataset.index]['checked'] = false; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
-  }
-}
-
-
-const createListDom = document.getElementById('createListItem')
-
-const createListItem = function(event){
-   event.preventDefault();
-
-  if(document.querySelector('#listName').value !== ''){
- 
-  const list = document.getElementById("list")
-  const listItem = document.createElement('div');
-  listItem.setAttribute('class','listItem');
-    
-  const checkContainer = document.createElement('label')  
-  checkContainer.setAttribute('class', 'checkContainer')
-    
-  const checkBox = document.createElement('input');
-  checkBox.setAttribute('class', 'check');
-  checkBox.setAttribute('type','checkbox');
-  checkBox.addEventListener('click', isChecked);
-  checkContainer.appendChild(checkBox);
-    
-  const check = document.createElement('span')
-  check.setAttribute('class', 'checkmark');
-  checkContainer.appendChild(check);
-    
-  listItem.appendChild(checkContainer)  
-  
-  const listDescription = document.createElement('p');
-  listDescription.innerText = document.querySelector('#listName').value;
-  listDescription.setAttribute('class', 'listDescription');
-  listDescription.setAttribute('contenteditable', 'true');
-  listDescription.setAttribute('role', 'textbox')
-  listDescription.addEventListener('keyup', updateLi)
-  listItem.appendChild(listDescription);
-  
-  const remove = document.createElement('span');
-  remove.setAttribute('class', 'remove')
-  remove.innerText = 'x';
-  remove.addEventListener('click', removeLi)
-  listItem.appendChild(remove);
-  
-  let theFirstChild = list.firstChild;
-  list.insertBefore(listItem, theFirstChild);
-  
-  let currentListItem = {
-     label: document.querySelector('#listName').value,
-     checked: false,
-     deleted: false
-  }
-  
-  listItems.push(currentListItem);
-    
-   checkContainer.setAttribute('data-index', listItems.length - 1);
-   listItem.setAttribute('data-index', listItems.length - 1);
-  
-  document.querySelector('#listName').value = '';
-  document.querySelector('#listName').focus();
-  // console.log(listItems);
-    }
-}
-
-
-createListDom.addEventListener('click', createListItem);
 
 
