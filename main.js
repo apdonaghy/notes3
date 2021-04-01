@@ -13,84 +13,91 @@ const darkUnderline = '0px 2px 5px rgba(0, 0, 0, .6)'
 const darkOptionsBlur = '0px 2px 5px rgba(0, 0, 0, 1)'
 
 
-const removeLi = function(e){
-  e.target.parentElement.remove()
-  notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['deleted'] = true;
+const removeLi = function (e) {
+    e.target.parentElement.remove()
+    notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['deleted'] = true;
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
 }
 
-const updateLi = function(e){
-  notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
-  console.log(notes[currentIndex]['listItems'])
+const updateLi = function (e) {
+    notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['label'] = e.target.parentElement.querySelector('.listDescription').innerText;
+    console.log(notes[currentIndex]['listItems'])
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
 }
 
-const isChecked = function(e){
-  if(e.target.checked === true){
-    notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['checked'] = true; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
-  }else{
-    notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['checked'] = false; e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
-  }
+const isChecked = function (e) {
+    if (e.target.checked === true) {
+        notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['checked'] = true;
+        e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "line-through"
+        localStorage.setItem("notesStorage", JSON.stringify(notes));
+    } else {
+        notes[currentIndex]['listItems'][e.target.parentElement.dataset.index]['checked'] = false;
+        e.target.parentElement.parentElement.querySelector('.listDescription').style.textDecoration = "none"
+        localStorage.setItem("notesStorage", JSON.stringify(notes));
+    }
 }
 
 
-const createListItem = function(e){
+const createListItem = function (e) {
     e.preventDefault();
- 
-   if(document.querySelector(`.class${currentIndex}`).querySelector('.listName').value !== ''){
-  
-   const list = document.querySelector(`.class${currentIndex}`).querySelector(".list")
-   const listItem = document.createElement('div');
-   listItem.setAttribute('class','listItem');
-     
-   const checkContainer = document.createElement('label')  
-   checkContainer.setAttribute('class', 'checkContainer')
-     
-   const checkBox = document.createElement('input');
-   checkBox.setAttribute('class', 'check');
-   checkBox.setAttribute('type','checkbox');
-   checkBox.addEventListener('click', isChecked);
-   checkContainer.appendChild(checkBox);
-     
-   const check = document.createElement('span')
-   check.setAttribute('class', 'checkmark');
-   checkContainer.appendChild(check);
-     
-   listItem.appendChild(checkContainer)  
-   
-   const listDescription = document.createElement('p');
-   listDescription.innerText = document.querySelector(`.class${currentIndex}`).querySelector('.listName').value;
-   listDescription.setAttribute('class', 'listDescription');
-   listDescription.setAttribute('contenteditable', 'true');
-   listDescription.setAttribute('role', 'textbox')
-   listDescription.addEventListener('keyup', updateLi)
-   listItem.appendChild(listDescription);
-   
-   const remove = document.createElement('span');
-   remove.setAttribute('class', 'remove')
-   remove.innerText = 'x';
-   remove.addEventListener('click', removeLi)
-   listItem.appendChild(remove);
-   
-   let theFirstChild = list.firstChild;
-   list.insertBefore(listItem, theFirstChild);
-   
-   let currentListItem = {
-      label: document.querySelector(`.class${currentIndex}`).querySelector('.listName').value,
-      checked: false,
-      deleted: false
-   }
-   
-   notes[currentIndex]['listItems'].push(currentListItem);
-     
-    checkContainer.setAttribute('data-index', notes[currentIndex]['listItems'].length - 1);
-    listItem.setAttribute('data-index', notes[currentIndex]['listItems'].length - 1);
-   
-    document.querySelector(`.class${currentIndex}`).querySelector('.listName').value = '';
-    document.querySelector(`.class${currentIndex}`).querySelector('.listName').focus();
-   // console.log(listItems);
-     }
- }
 
- const makeListEvent = function(e){
+    if (document.querySelector(`.class${currentIndex}`).querySelector('.listName').value !== '') {
+
+        const list = document.querySelector(`.class${currentIndex}`).querySelector(".list")
+        const listItem = document.createElement('div');
+        listItem.setAttribute('class', 'listItem');
+
+        const checkContainer = document.createElement('label')
+        checkContainer.setAttribute('class', 'checkContainer')
+
+        const checkBox = document.createElement('input');
+        checkBox.setAttribute('class', 'check');
+        checkBox.setAttribute('type', 'checkbox');
+        checkBox.addEventListener('click', isChecked);
+        checkContainer.appendChild(checkBox);
+
+        const check = document.createElement('span')
+        check.setAttribute('class', 'checkmark');
+        checkContainer.appendChild(check);
+
+        listItem.appendChild(checkContainer)
+
+        const listDescription = document.createElement('p');
+        listDescription.innerText = document.querySelector(`.class${currentIndex}`).querySelector('.listName').value;
+        listDescription.setAttribute('class', 'listDescription');
+        listDescription.setAttribute('contenteditable', 'true');
+        listDescription.setAttribute('role', 'textbox')
+        listDescription.addEventListener('keyup', updateLi)
+        listItem.appendChild(listDescription);
+
+        const remove = document.createElement('span');
+        remove.setAttribute('class', 'remove')
+        remove.innerText = 'x';
+        remove.addEventListener('click', removeLi)
+        listItem.appendChild(remove);
+
+        let theFirstChild = list.firstChild;
+        list.insertBefore(listItem, theFirstChild);
+
+        let currentListItem = {
+            label: document.querySelector(`.class${currentIndex}`).querySelector('.listName').value,
+            checked: false,
+            deleted: false
+        }
+
+        notes[currentIndex]['listItems'].push(currentListItem);
+
+        checkContainer.setAttribute('data-index', notes[currentIndex]['listItems'].length - 1);
+        listItem.setAttribute('data-index', notes[currentIndex]['listItems'].length - 1);
+
+        document.querySelector(`.class${currentIndex}`).querySelector('.listName').value = '';
+        document.querySelector(`.class${currentIndex}`).querySelector('.listName').focus();
+        // console.log(listItems);
+    }
+    localStorage.setItem("notesStorage", JSON.stringify(notes));
+}
+
+const makeListEvent = function (e) {
 
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteP').style.display = 'none';
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.linksDiv').style.display = 'none';
@@ -101,7 +108,7 @@ const createListItem = function(e){
 
 }
 
-const noteTabClick = function(e){
+const noteTabClick = function (e) {
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.todo').style.display = 'none';
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteP').style.display = 'block';
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.linksDiv').style.display = 'block';
@@ -110,7 +117,7 @@ const noteTabClick = function(e){
     resizeAllGridItems()
 }
 
-const listTabClick = function(e){
+const listTabClick = function (e) {
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.todo').style.display = 'block';
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.noteP').style.display = 'none';
     document.querySelector(`.class${e.target.dataset.index}`).querySelector('.linksDiv').style.display = 'none';
@@ -121,7 +128,7 @@ const listTabClick = function(e){
 
 
 
-function createColor(textColorVar, backgroundColorVar, underlineBlur, optionsBlur, classAccessInside){
+function createColor(textColorVar, backgroundColorVar, underlineBlur, optionsBlur, classAccessInside) {
     let thisClassOriginal = document.querySelector(`.class${classAccessInside}`)
     thisClassOriginal.style.color = textColorVar;
     thisClassOriginal.style.backgroundColor = backgroundColorVar;
@@ -137,8 +144,8 @@ const checkForLinks = function (textSource, dataIndex) {
     var t = textSource
 
     if (t.match(regex)) {
-        for (let link in t.match(regex)){
-            if(notes[dataIndex]['fromStorage'] === true){
+        for (let link in t.match(regex)) {
+            if (notes[dataIndex]['fromStorage'] === true) {
                 notes[dataIndex]['links'].push(t.match(regex)[link]);
                 let hyperlink = document.createElement('a')
                 hyperlink.setAttribute('class', 'hyperlink')
@@ -149,18 +156,18 @@ const checkForLinks = function (textSource, dataIndex) {
                 hyperlink.setAttribute('target', "_blank")
                 document.querySelector(`.class${dataIndex}`).querySelector('.linksDiv').appendChild(hyperlink);
             } else {
-            if (notes[dataIndex]['links'].includes(t.match(regex)[link]) === false) {
-                notes[dataIndex]['links'].push(t.match(regex)[link]);
-                let hyperlink = document.createElement('a')
-                hyperlink.setAttribute('class', 'hyperlink')
-                hyperlink.setAttribute('data-index', dataIndex)
-                hyperlink.href = t.match(regex)[link]
-                hyperlink.innerHTML = `<i class="fas fa-external-link-alt"></i>${t.match(regex)[link]}`;
-                hyperlink.style.display = "block";
-                hyperlink.setAttribute('target', "_blank")
-                document.querySelector(`.class${dataIndex}`).querySelector('.linksDiv').appendChild(hyperlink);
+                if (notes[dataIndex]['links'].includes(t.match(regex)[link]) === false) {
+                    notes[dataIndex]['links'].push(t.match(regex)[link]);
+                    let hyperlink = document.createElement('a')
+                    hyperlink.setAttribute('class', 'hyperlink')
+                    hyperlink.setAttribute('data-index', dataIndex)
+                    hyperlink.href = t.match(regex)[link]
+                    hyperlink.innerHTML = `<i class="fas fa-external-link-alt"></i>${t.match(regex)[link]}`;
+                    hyperlink.style.display = "block";
+                    hyperlink.setAttribute('target', "_blank")
+                    document.querySelector(`.class${dataIndex}`).querySelector('.linksDiv').appendChild(hyperlink);
                 }
-             }
+            }
         }
         notes[dataIndex]['fromStorage'] = false;
     } else {
@@ -246,7 +253,7 @@ const dontShowDelete = function (e) {
     thisClassOriginal.querySelector('.closeContainer').style.display = "none";
 }
 
-const showMakeList = function(e){
+const showMakeList = function (e) {
     let thisClassOriginal = document.querySelector(`.class${currentIndex}`)
     thisClassOriginal.querySelector('.createListContainer').style.display = "inline-block";
     thisClassOriginal.querySelector('.closeContainer').style.display = "none";
@@ -435,13 +442,13 @@ const createNote = function (note) {
         } else if (note['color'] === 'red') {
 
             createColor(black, red, lightUnderline, lightOptionsBlur, notes.length - 1)
-        
+
         } else if (note['color'] === 'green') {
-   
+
             createColor(black, green, lightUnderline, lightOptionsBlur, notes.length - 1)
 
         } else if (note['color'] === 'blue') {
-         
+
             createColor(black, blue, lightUnderline, lightOptionsBlur, notes.length - 1)
 
         }
@@ -486,7 +493,7 @@ const getInputValues = function (event) {
         deleted: false,
         color: "standard",
         links: [],
-        listItems:[],
+        listItems: [],
         fromStorage: false
     }
 
@@ -508,7 +515,7 @@ const focusIn = function (e) {
     thisClass.querySelector('.user-note-pad').addEventListener('mouseover', colorSymbolOut);
     thisClass.querySelector('.fa-palette').addEventListener('mouseover', dontShowDelete);
     thisClass.querySelector('.close-this').addEventListener('mouseover', colorSymbolOut);
-   
+
     cover.style.display = "block"
     cover.style.zIndex = "3"
     cover.addEventListener('mouseover', colorSymbolAndDeleteOut);
@@ -540,7 +547,7 @@ const focusOut = function (e) {
     const center = document.querySelector('.centered')
     center.classList.remove("centered");
     setTimeout(function () {
-    resizeAllGridItems()
+        resizeAllGridItems()
     }, 200);
 }
 
@@ -606,5 +613,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 });
-
-
